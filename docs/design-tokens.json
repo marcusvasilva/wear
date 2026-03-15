@@ -1,0 +1,136 @@
+{
+  "brand": "Wear Sublimações",
+  "colors": {
+    "primary": {
+      "green": "#2ECC40",
+      "greenHover": "#27AE36",
+      "greenLight": "#E8F8EA"
+    },
+    "neutral": {
+      "black": "#1B1B1B",
+      "dark": "#333333",
+      "gray600": "#666666",
+      "gray400": "#999999",
+      "gray200": "#E0E0E0",
+      "gray100": "#F5F5F5",
+      "white": "#FFFFFF"
+    },
+    "accent": {
+      "blue": "#1A73E8",
+      "blueLight": "#E3F0FC"
+    },
+    "feedback": {
+      "priceRed": "#E53935",
+      "priceOld": "#999999",
+      "success": "#2ECC40",
+      "warning": "#FF9800",
+      "error": "#E53935",
+      "info": "#1A73E8"
+    },
+    "badges": {
+      "discount": "#E53935",
+      "cashback": "#FF6F00",
+      "new": "#2ECC40"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "primary": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem"
+    },
+    "fontWeight": {
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700,
+      "extrabold": 800
+    }
+  },
+  "spacing": {
+    "sectionPaddingY": "4rem",
+    "containerMaxWidth": "1280px",
+    "cardGap": "1rem",
+    "cardPadding": "1rem"
+  },
+  "borderRadius": {
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "xl": "16px",
+    "full": "9999px"
+  },
+  "shadows": {
+    "card": "0 2px 8px rgba(0, 0, 0, 0.08)",
+    "cardHover": "0 4px 16px rgba(0, 0, 0, 0.12)",
+    "sticky": "0 -2px 12px rgba(0, 0, 0, 0.1)"
+  },
+  "layout": {
+    "topBar": {
+      "bg": "#1B1B1B",
+      "text": "#FFFFFF",
+      "height": "36px",
+      "fontSize": "0.75rem"
+    },
+    "header": {
+      "bg": "#FFFFFF",
+      "text": "#333333",
+      "height": "72px",
+      "borderBottom": "#E0E0E0"
+    },
+    "footer": {
+      "bg": "#1B1B1B",
+      "text": "#CCCCCC",
+      "headingText": "#FFFFFF"
+    }
+  },
+  "components": {
+    "button": {
+      "primary": {
+        "bg": "#2ECC40",
+        "text": "#FFFFFF",
+        "hoverBg": "#27AE36",
+        "borderRadius": "8px",
+        "paddingX": "2rem",
+        "paddingY": "0.875rem",
+        "fontWeight": 700,
+        "fontSize": "1rem"
+      },
+      "secondary": {
+        "bg": "#FFFFFF",
+        "text": "#333333",
+        "border": "#E0E0E0",
+        "hoverBg": "#F5F5F5"
+      }
+    },
+    "optionCard": {
+      "bg": "#FFFFFF",
+      "border": "#E0E0E0",
+      "selectedBorder": "#2ECC40",
+      "selectedBg": "#E8F8EA",
+      "borderRadius": "12px",
+      "padding": "1rem"
+    },
+    "trustBar": {
+      "bg": "#FFFFFF",
+      "iconColor": "#2ECC40",
+      "textColor": "#333333",
+      "borderTop": "#E0E0E0"
+    },
+    "priceBadge": {
+      "bg": "#E53935",
+      "text": "#FFFFFF",
+      "borderRadius": "4px"
+    }
+  }
+}

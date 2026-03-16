@@ -45,12 +45,13 @@ export function HeroSection() {
 
             {/* Preço */}
             <div>
-              <p className="text-sm text-text-muted line-through">R$ 189,90</p>
+              {/* TODO: substituir por preços reais da Wear */}
+              <p className="text-sm text-text-muted line-through">R$ 519,69</p>
               <p className="text-3xl font-bold text-price-red">
-                R$ 149,90
+                R$ 433,27
               </p>
               <p className="text-sm text-text-muted mt-0.5">
-                ou 6x de R$ 24,98 sem juros
+                ou 6x de R$ 72,21 sem juros
               </p>
             </div>
 

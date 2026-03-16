@@ -12,7 +12,7 @@
 ### Tipos e Dados
 - [x] Tipos TypeScript (`src/types/index.ts`): ModeloId, TamanhoId, TecidoId, BaseId, ExtraId, ConfiguracaoSelecionada
 - [x] Catálogo de produtos (`src/data/products.ts`): 4 modelos, 4 tamanhos, 2 tecidos, 3 bases, 2 extras, descontos progressivos
-- [x] Mapa de preços (`src/data/prices.ts`): estrutura pronta, valores zerados (aguardando dados reais)
+- [x] Mapa de preços (`src/data/prices.ts`): estrutura pronta com preços placeholder da Printi (aguardando dados reais)
 - [x] Mapeamento Magazord (`src/data/magazord-mapping.ts`): estrutura pronta, IDs vazios
 
 ### Lógica de Negócio
@@ -28,7 +28,7 @@
 - [x] Footer com 4 colunas (sobre, produtos, institucional, contato)
 
 ### Seções da LP
-- [x] Hero section (mockup do produto, preço, rating, CTA)
+- [x] Hero section (mockup do produto, preço placeholder, rating, CTA)
 - [x] Trust bar (envio 48h, 6x sem juros, 100% seguro, troca garantida)
 - [x] Configurador de produto com 6 steps (Modelo, Tamanho, Tecido, Base, Extras, Quantidade)
 - [x] Sidebar sticky com resumo do pedido, preço, frete e botão Comprar
@@ -43,25 +43,63 @@
 - [x] Logo Wear branco (`public/logos/logo-wear-white.png`)
 - [x] Mockup Wind Banner (`public/products/mockup_windbanner_wear.png`)
 
+### Imagens Placeholder (Printi CDN — temporário para apresentação)
+- [x] Imagens dos 4 modelos (Asa/Pena, Blade/Faca, Gota, Vela)
+- [x] Imagens dos 4 tamanhos (1m PP, 2m P, 3m M, 4m G)
+- [x] Imagens dos 2 tecidos (Oxford, Oxford Blecaute)
+- [x] Imagens das 3 bases (Sem base, Padrão Preto, Premium Preto)
+- [x] Imagens dos extras (bandeira reserva, capa)
+- [x] Preços placeholder baseados na Printi (R$ 433–519/unid) em `src/data/prices.ts`
+- [x] `next.config.ts` configurado para permitir imagens do CDN da Printi
+
+---
+
+## Pendente — Banco de Dados (Neon Postgres)
+
+### Schema
+- [ ] Tabela `modelos` (id, nome, descricao, imagem_url, ativo)
+- [ ] Tabela `tamanhos` (id, nome, largura, altura, ativo)
+- [ ] Tabela `tecidos` (id, nome, descricao, ativo)
+- [ ] Tabela `bases` (id, nome, descricao, preco_centavos, ativo)
+- [ ] Tabela `extras` (id, nome, descricao, preco_centavos, ativo)
+- [ ] Tabela `precos` (modelo_id, tamanho_id, tecido_id, preco_centavos)
+- [ ] Tabela `descontos` (quantidade_minima, percentual)
+- [ ] Tabela `magazord_mapping` (modelo_id, tamanho_id, tecido_id, base_id, magazord_product_id)
+- [ ] Tabela `avaliacoes` (id, nome, cidade, estado, nota, texto, created_at)
+- [ ] Tabela `pedidos_lead` (id, config_json, preco_total, cep, created_at)
+
+### API Routes (Next.js)
+- [ ] `GET /api/products` — catálogo completo (modelos, tamanhos, tecidos, bases, extras)
+- [ ] `GET /api/prices` — matriz de preços
+- [ ] `POST /api/freight` — cálculo de frete real (proxy Correios/Magazord)
+- [ ] `POST /api/checkout` — registra lead + retorna URL Magazord
+- [ ] `GET /api/reviews` — avaliações do banco
+
+### Migração de Dados
+- [ ] Popular tabelas com dados atuais de `src/data/products.ts`
+- [ ] Popular preços placeholder atuais de `src/data/prices.ts`
+- [ ] Popular avaliações atuais de `SocialProofSection.tsx`
+- [ ] Adaptar hooks/componentes para consumir API em vez de imports estáticos
+
 ---
 
 ## Pendente — Dados Reais (depende da Wear)
 
 ### Preços e Catálogo
-- [ ] Preencher tabela de preços em `src/data/prices.ts` com valores reais de cada combinação modelo x tamanho x tecido
-- [ ] Confirmar preços dos kits de base (padrão e premium) em `src/data/products.ts`
+- [ ] Substituir preços placeholder por valores reais em cada combinação modelo x tamanho x tecido
+- [ ] Confirmar preços dos kits de base (padrão e premium)
 - [ ] Confirmar preços dos extras (bandeira reserva, capa protetora)
 - [ ] Confirmar quais modelos, tamanhos e tecidos estão de fato disponíveis
 - [ ] Definir se há descontos progressivos e quais faixas
 
 ### Integração Magazord
 - [ ] Obter credenciais de API (ApiKey + Password) com suporte Magazord
-- [ ] Mapear IDs de produto/variação no Magazord para cada combinação em `src/data/magazord-mapping.ts`
+- [ ] Mapear IDs de produto/variação no Magazord para cada combinação em `magazord_mapping`
 - [ ] Validar formato exato da URL de add-to-cart com o suporte Magazord
 - [ ] Testar fluxo completo: LP -> carrinho -> checkout Magazord
 
-### Imagens
-- [ ] Fotos/renders de cada modelo (Pena, Faca, Gota, Vela) para os cards do configurador
+### Imagens Reais (substituir placeholders da Printi)
+- [ ] Fotos/renders de cada modelo (Pena, Faca, Gota, Vela)
 - [ ] Fotos de cada tamanho com referência de proporção
 - [ ] Fotos das bases (sem base, padrão, premium)
 - [ ] Fotos dos tecidos (Bora, Oxford)
@@ -69,6 +107,7 @@
 - [ ] Hero image/vídeo de alta qualidade para desktop e mobile
 - [ ] Fotos reais de clientes usando wind banners (social proof)
 - [ ] Logo Wear em SVG (preto e branco) para melhor qualidade
+- [ ] Remover domínio Printi do `next.config.ts` após substituição
 
 ### Conteúdo
 - [ ] Gabaritos reais em PDF por modelo e tamanho para download

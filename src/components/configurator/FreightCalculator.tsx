@@ -1,7 +1,7 @@
 "use client";
 
 import { useFreight } from "@/hooks/useFreight";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, maskCep } from "@/lib/utils";
 import type { BaseId, TamanhoId, ShippingOption } from "@/types";
 import { Truck, Loader2, Package } from "lucide-react";
 
@@ -38,11 +38,11 @@ export function FreightCalculator({ base, tamanho, quantidade }: FreightCalculat
       <div className="flex gap-2">
         <input
           type="text"
-          value={cep}
+          value={maskCep(cep)}
           onChange={(e) => setCep(e.target.value.replace(/\D/g, "").slice(0, 8))}
           onKeyDown={handleKeyDown}
-          placeholder="00000000"
-          maxLength={8}
+          placeholder="00000-000"
+          maxLength={9}
           className="flex-1 h-10 px-3 border border-border rounded-lg text-sm"
           aria-label="CEP de destino"
         />

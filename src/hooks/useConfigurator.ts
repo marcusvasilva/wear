@@ -5,7 +5,6 @@ import type {
   ConfiguracaoSelecionada,
   ModeloId,
   TamanhoId,
-  TecidoId,
   BaseId,
   ExtraId,
 } from "@/types";
@@ -14,7 +13,7 @@ import { calcularPreco } from "@/lib/price-calculator";
 const INITIAL_STATE: ConfiguracaoSelecionada = {
   modelo: null,
   tamanho: null,
-  tecido: null,
+  tecido: "bora",
   base: null,
   extras: [],
   quantidade: 1,
@@ -29,10 +28,6 @@ export function useConfigurator() {
 
   const setTamanho = useCallback((tamanho: TamanhoId) => {
     setConfig((prev) => ({ ...prev, tamanho }));
-  }, []);
-
-  const setTecido = useCallback((tecido: TecidoId) => {
-    setConfig((prev) => ({ ...prev, tecido }));
   }, []);
 
   const setBase = useCallback((base: BaseId) => {
@@ -61,7 +56,6 @@ export function useConfigurator() {
   const isComplete =
     config.modelo !== null &&
     config.tamanho !== null &&
-    config.tecido !== null &&
     config.base !== null;
 
   return {
@@ -70,7 +64,6 @@ export function useConfigurator() {
     isComplete,
     setModelo,
     setTamanho,
-    setTecido,
     setBase,
     toggleExtra,
     setQuantidade,

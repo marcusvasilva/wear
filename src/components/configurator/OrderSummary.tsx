@@ -3,6 +3,7 @@
 import type { ConfiguracaoSelecionada } from "@/types";
 import { modelos, tamanhos, bases } from "@/data/products";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
+import { saveCheckoutConfig } from "@/lib/checkout-storage";
 import { FreightCalculator } from "./FreightCalculator";
 import { ShoppingCart } from "lucide-react";
 
@@ -26,14 +27,8 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
   const baseNome = bases.find((b) => b.id === config.base)?.nome;
 
   const handleComprar = () => {
-    const params = new URLSearchParams();
-    if (config.modelo) params.set("modelo", config.modelo);
-    if (config.tamanho) params.set("tamanho", config.tamanho);
-    if (config.base) params.set("base", config.base);
-    if (config.extras.length > 0) params.set("extras", config.extras.join(","));
-    params.set("qtd", String(config.quantidade));
-
-    window.location.href = `/checkout?${params.toString()}`;
+    saveCheckoutConfig(config);
+    window.location.href = "/checkout";
   };
 
   return (

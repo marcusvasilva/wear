@@ -16,7 +16,7 @@ export function calcularPreco(config: ConfiguracaoSelecionada): {
 } {
   const { modelo, tamanho, tecido, base, extras: extrasSelecionados, quantidade } = config;
 
-  if (!modelo || !tamanho || !tecido) {
+  if (!modelo || !tamanho) {
     return {
       precoBase: 0,
       precoAdicionalBase: 0,

@@ -7,7 +7,7 @@ export const modelos: Modelo[] = [
   {
     id: "pena",
     nome: "Pena",
-    descricao: "Formato clássico curvo",
+    descricao: "Formato classico curvo",
     imagem: `${CDN}/Asa_0d60aa1657.png`,
     gabaritoUrl: "/gabaritos/gabarito-pena.pdf",
   },
@@ -38,25 +38,25 @@ export const tamanhos: Tamanho[] = [
   {
     id: "p",
     nome: "Pequeno",
-    dimensoes: "0,65m × 1,50m",
+    dimensoes: "0,65m x 1,50m",
     imagem: `${CDN}/Display_1_Metro_PP_7c541c21ca.png`,
   },
   {
     id: "m",
-    nome: "Médio",
-    dimensoes: "0,65m × 2,00m",
+    nome: "Medio",
+    dimensoes: "0,65m x 2,00m",
     imagem: `${CDN}/Display_2_Metros_P_40ff5c2ec8.png`,
   },
   {
     id: "g",
     nome: "Grande",
-    dimensoes: "0,65m × 2,50m",
+    dimensoes: "0,65m x 2,50m",
     imagem: `${CDN}/Display_3_Metros_M_6acad4dc0d.png`,
   },
   {
     id: "gg",
     nome: "Extra Grande",
-    dimensoes: "0,65m × 3,00m",
+    dimensoes: "0,65m x 3,00m",
     imagem: `${CDN}/Display_4_Metros_G_319d962fcd.png`,
   },
 ];
@@ -65,37 +65,31 @@ export const tecidos: Tecido[] = [
   {
     id: "bora",
     nome: "Tecido Bora",
-    descricao: "Sublimação com alta resolução, tipo veste fácil",
+    descricao: "Sublimacao com alta resolucao, tipo veste facil",
     imagem: `${CDN}/Tecido_Oxford_d2e5b38d5a.png`,
-  },
-  {
-    id: "oxford",
-    nome: "Oxford Blecaute",
-    descricao: "Mais grosso, não transparece",
-    imagem: `${CDN}/Tecido_Oxford_Blecaute_c9a961e9a0.png`,
   },
 ];
 
 export const bases: Base[] = [
   {
     id: "sem-base",
-    nome: "Sem base (somente tecido)",
-    descricao: "Apenas a bandeira",
+    nome: "Somente Tecido",
+    descricao: "Apenas a bandeira, sem estrutura",
     precoAdicional: 0,
     imagem: `${CDN}/Sem_base_e_estrutura_7fbbeee037.png`,
   },
   {
-    id: "kit-padrao",
-    nome: "Kit Haste + Base Padrão",
-    descricao: "Alumínio + base plástica preta",
-    precoAdicional: 0, // TODO: preencher com preço real
+    id: "haste-tecido",
+    nome: "Haste + Tecido",
+    descricao: "Haste de aluminio + bandeira",
+    precoAdicional: 4500, // TODO: preencher com preco real
     imagem: `${CDN}/Base_Padrao_Preto_1ff153c0ee.png`,
   },
   {
-    id: "kit-premium",
-    nome: "Kit Premium",
-    descricao: "Alumínio + base premium",
-    precoAdicional: 0, // TODO: preencher com preço real
+    id: "base-haste-tecido",
+    nome: "Base + Haste + Tecido",
+    descricao: "Kit completo: base + haste + bandeira",
+    precoAdicional: 8900, // TODO: preencher com preco real
     imagem: `${CDN}/Base_Premium_Preto_5d855cd95d.png`,
   },
 ];
@@ -104,13 +98,13 @@ export const extras: Extra[] = [
   {
     id: "bandeira-reserva",
     nome: "Bandeira Reserva",
-    preco: 0, // TODO: preencher com preço real
+    preco: 0, // TODO: preencher com preco real
     imagem: `${CDN}/Sem_personalizacao_c7a1d4e9b7.png`,
   },
   {
     id: "capa-protetora",
     nome: "Capa Protetora",
-    preco: 0, // TODO: preencher com preço real
+    preco: 0, // TODO: preencher com preco real
     imagem: `${CDN}/Pequena_ou_Grande_Enobrecimento_da_capa_4_cores_8b1a44e6e3.png`,
   },
 ];

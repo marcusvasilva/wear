@@ -1,12 +1,12 @@
 "use client";
 
 import { useConfigurator } from "@/hooks/useConfigurator";
-import { modelos, tamanhos, tecidos, bases, extras } from "@/data/products";
+import { modelos, tamanhos, bases, extras } from "@/data/products";
 import { StepSelector } from "@/components/configurator/StepSelector";
 import { OptionCard } from "@/components/configurator/OptionCard";
 import { QuantitySelector } from "@/components/configurator/QuantitySelector";
 import { OrderSummary } from "@/components/configurator/OrderSummary";
-import type { ModeloId, TamanhoId, TecidoId, BaseId, ExtraId } from "@/types";
+import type { ModeloId, TamanhoId, BaseId, ExtraId } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
 export function ConfiguratorSection() {
@@ -16,7 +16,6 @@ export function ConfiguratorSection() {
     isComplete,
     setModelo,
     setTamanho,
-    setTecido,
     setBase,
     toggleExtra,
     setQuantidade,
@@ -25,7 +24,7 @@ export function ConfiguratorSection() {
   return (
     <section id="configurador" className="bg-gray-50 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
-        <h2 className="text-2xl lg:text-3xl font-bold text-text mb-2">Configuração</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold text-text mb-2">Configuracao</h2>
         <p className="text-sm text-text-muted mb-8">
           Monte seu Wind Banner personalizado em poucos passos
         </p>
@@ -65,24 +64,8 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 3: Tecido */}
-            <StepSelector numero={3} titulo="Tecido" descricao="Escolha o material da bandeira">
-              <div className="grid grid-cols-2 gap-3">
-                {tecidos.map((tecido) => (
-                  <OptionCard
-                    key={tecido.id}
-                    nome={tecido.nome}
-                    descricao={tecido.descricao}
-                    imagem={tecido.imagem}
-                    selected={config.tecido === tecido.id}
-                    onClick={() => setTecido(tecido.id as TecidoId)}
-                  />
-                ))}
-              </div>
-            </StepSelector>
-
-            {/* Step 4: Base e Estrutura */}
-            <StepSelector numero={4} titulo="Base e Estrutura" descricao="Escolha como montar seu Wind Banner">
+            {/* Step 3: Base e Estrutura */}
+            <StepSelector numero={3} titulo="Base e Estrutura" descricao="Escolha como montar seu Wind Banner">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {bases.map((base) => (
                   <OptionCard
@@ -101,14 +84,14 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 5: Extras */}
-            <StepSelector numero={5} titulo="Extras" descricao="Adicione itens opcionais">
+            {/* Step 4: Extras */}
+            <StepSelector numero={4} titulo="Extras" descricao="Adicione itens opcionais">
               <div className="grid grid-cols-2 gap-3">
                 {extras.map((extra) => (
                   <OptionCard
                     key={extra.id}
                     nome={extra.nome}
-                    descricao={extra.preco > 0 ? `+${formatCurrency(extra.preco)}` : "Consultar preço"}
+                    descricao={extra.preco > 0 ? `+${formatCurrency(extra.preco)}` : "Consultar preco"}
                     imagem={extra.imagem}
                     selected={config.extras.includes(extra.id as ExtraId)}
                     onClick={() => toggleExtra(extra.id as ExtraId)}
@@ -117,8 +100,8 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 6: Quantidade */}
-            <StepSelector numero={6} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
+            {/* Step 5: Quantidade */}
+            <StepSelector numero={5} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
               <QuantitySelector
                 quantidade={config.quantidade}
                 precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}

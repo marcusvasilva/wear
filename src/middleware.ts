@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 
-const protectedRoutes = ["/checkout", "/pedido", "/meus-pedidos"];
+const protectedRoutes = ["/pedido", "/meus-pedidos"];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
@@ -17,5 +17,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/checkout/:path*", "/pedido/:path*", "/meus-pedidos/:path*"],
+  matcher: ["/pedido/:path*", "/meus-pedidos/:path*"],
 };

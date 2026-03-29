@@ -1,9 +1,8 @@
 "use client";
 
 import type { ConfiguracaoSelecionada } from "@/types";
-import { modelos, tamanhos, tecidos, bases } from "@/data/products";
+import { modelos, tamanhos, bases } from "@/data/products";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
-import { gerarUrlCheckout } from "@/lib/magazord";
 import { FreightCalculator } from "./FreightCalculator";
 import { ShoppingCart } from "lucide-react";
 
@@ -24,28 +23,30 @@ interface OrderSummaryProps {
 export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
   const modeloNome = modelos.find((m) => m.id === config.modelo)?.nome;
   const tamanhoInfo = tamanhos.find((t) => t.id === config.tamanho);
-  const tecidoNome = tecidos.find((t) => t.id === config.tecido)?.nome;
   const baseNome = bases.find((b) => b.id === config.base)?.nome;
 
   const handleComprar = () => {
-    const url = gerarUrlCheckout(config);
-    if (url) {
-      window.open(url, "_blank");
-    }
+    const params = new URLSearchParams();
+    if (config.modelo) params.set("modelo", config.modelo);
+    if (config.tamanho) params.set("tamanho", config.tamanho);
+    if (config.base) params.set("base", config.base);
+    if (config.extras.length > 0) params.set("extras", config.extras.join(","));
+    params.set("qtd", String(config.quantidade));
+
+    window.location.href = `/checkout?${params.toString()}`;
   };
 
   return (
     <div className="border border-border rounded-2xl bg-white p-5 space-y-4">
       <h3 className="font-bold text-text text-base">Resumo</h3>
 
-      {/* Seleções */}
+      {/* Selecoes */}
       <div className="space-y-2 text-sm">
         <SummaryLine label="Modelo" value={modeloNome} />
         <SummaryLine
           label="Tamanho"
           value={tamanhoInfo ? `${tamanhoInfo.nome} (${tamanhoInfo.dimensoes})` : undefined}
         />
-        <SummaryLine label="Tecido" value={tecidoNome} />
         <SummaryLine label="Base" value={baseNome} />
         {config.extras.length > 0 && (
           <SummaryLine label="Extras" value={`${config.extras.length} selecionado(s)`} />
@@ -55,7 +56,7 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
 
       <hr className="border-border" />
 
-      {/* Preços */}
+      {/* Precos */}
       {preco.total > 0 ? (
         <div className="space-y-1.5">
           {preco.descontoPercentual > 0 && (
@@ -80,16 +81,20 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
         </div>
       ) : (
         <p className="text-sm text-text-muted text-center py-2">
-          Selecione as opções para ver o preço
+          Selecione as opcoes para ver o preco
         </p>
       )}
 
       <hr className="border-border" />
 
       {/* Frete */}
-      <FreightCalculator />
+      <FreightCalculator
+        base={config.base}
+        tamanho={config.tamanho}
+        quantidade={config.quantidade}
+      />
 
-      {/* Botão comprar */}
+      {/* Botao comprar */}
       <button
         onClick={handleComprar}
         disabled={!isComplete}
@@ -107,7 +112,7 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
         rel="noopener noreferrer"
         className="block text-center text-sm text-blue hover:underline"
       >
-        Dúvidas? Fale pelo WhatsApp
+        Duvidas? Fale pelo WhatsApp
       </a>
     </div>
   );
@@ -117,7 +122,7 @@ function SummaryLine({ label, value }: { label: string; value?: string }) {
   return (
     <div className="flex justify-between">
       <span className="text-text-muted">{label}</span>
-      <span className="font-medium text-text">{value ?? "—"}</span>
+      <span className="font-medium text-text">{value ?? "\u2014"}</span>
     </div>
   );
 }

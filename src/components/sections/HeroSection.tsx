@@ -1,94 +1,73 @@
-import Image from "next/image";
-import { Star } from "lucide-react";
+"use client";
+
+import { ImageIcon, CheckCircle, ArrowRight } from "lucide-react";
+import { AnimateIn } from "@/components/ui/AnimateIn";
 
 export function HeroSection() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-8 lg:py-12">
+    <section className="bg-header-bg text-white">
+      <div className="mx-auto max-w-7xl px-4 py-12 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Imagem do produto */}
-          <div className="relative bg-gray-50 rounded-2xl overflow-hidden aspect-[4/3] flex items-center justify-center">
-            <Image
-              src="/products/mockup_windbanner_wear.png"
-              alt="Wind Banner Personalizado Wear Sublimações"
-              fill
-              className="object-contain p-4"
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
+          {/* Copy comercial */}
+          <AnimateIn className="flex flex-col gap-6 order-2 lg:order-1">
+            <span className="inline-flex items-center self-start bg-primary/20 text-primary text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wide">
+              Solução completa em Wind Banner
+            </span>
 
-          {/* Info do produto */}
-          <div className="flex flex-col gap-4">
-            <div>
-              <p className="text-xs text-text-muted uppercase tracking-wider mb-1">
-                Wear Sublimações
-              </p>
-              <h1 className="text-3xl lg:text-4xl font-bold text-text leading-tight">
-                Wind Banner Personalizado
-              </h1>
-            </div>
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
+              Produzimos a arte do seu Wind Banner em até 48 horas
+            </h1>
 
-            {/* Rating */}
-            <div className="flex items-center gap-2">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    size={16}
-                    className={star <= 4 ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-text-muted">(47 avaliações)</span>
-            </div>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Ofertamos a solução completa pra você: fazemos a arte do seu Wind
+              Banner, produzimos e enviamos com Haste e Base.
+            </p>
 
-            {/* Preço */}
-            <div>
-              {/* TODO: substituir por preços reais da Wear */}
-              <p className="text-sm text-text-muted line-through">R$ 519,69</p>
-              <p className="text-3xl font-bold text-price-red">
-                R$ 433,27
-              </p>
-              <p className="text-sm text-text-muted mt-0.5">
-                ou 6x de R$ 72,21 sem juros
-              </p>
-            </div>
-
-            {/* Descrição */}
-            <div className="text-sm text-text-muted leading-relaxed space-y-2">
-              <p>
-                Wind Banner com sublimação em alta resolução, perfeito para divulgação do seu negócio.
-                Tecido resistente, cores vibrantes e acabamento profissional.
-              </p>
-              <ul className="space-y-1">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  Impressão sublimada de alta resolução
+            <ul className="space-y-2.5">
+              {[
+                "Impressão premium com cores que não desbotam",
+                "Tecido e estrutura resistentes a intempéries",
+                "Produção e envio em até 48h úteis",
+                "Atendimento humano via WhatsApp",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2.5 text-sm text-gray-300">
+                  <CheckCircle size={16} className="text-primary flex-shrink-0" />
+                  {item}
                 </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  Tecido resistente a intempéries
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  Envio em até 48h úteis
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  Sistema veste fácil (encaixa na haste)
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
 
-            {/* CTA */}
-            <a
-              href="#configurador"
-              className="mt-2 inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-bold text-base px-8 py-3.5 rounded-lg transition-colors w-full sm:w-auto text-center"
-            >
-              Configure o seu agora
-            </a>
-          </div>
+            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+              <a
+                href="#configurador"
+                className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-bold text-base px-8 py-3.5 rounded-lg transition-colors"
+              >
+                Configurar meu Wind Banner
+                <ArrowRight size={18} />
+              </a>
+              <a
+                href="https://wa.me/5518998074936?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20Wind%20Banner"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-gray-600 hover:border-gray-400 text-white font-medium text-sm px-6 py-3.5 rounded-lg transition-colors"
+              >
+                Falar no WhatsApp
+              </a>
+            </div>
+          </AnimateIn>
+
+          {/* Placeholder imagem hero */}
+          <AnimateIn className="order-1 lg:order-2" delay={200}>
+            <div className="relative aspect-[4/3] bg-gray-800 rounded-2xl border-2 border-dashed border-gray-600 flex flex-col items-center justify-center p-8 text-center">
+              <ImageIcon size={48} className="text-gray-500 mb-4" />
+              <p className="text-sm text-gray-400 font-medium">
+                Imagem principal do Wind Banner aqui
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Banner hero com produto em destaque
+              </p>
+            </div>
+          </AnimateIn>
         </div>
       </div>
     </section>

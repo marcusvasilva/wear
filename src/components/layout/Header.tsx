@@ -34,21 +34,6 @@ export function Header() {
             priority
           />
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-text">
-          <a href="#configurador" className="hover:text-primary transition-colors">
-            Configurador
-          </a>
-          <a href="#especificacoes" className="hover:text-primary transition-colors">
-            Especificacoes
-          </a>
-          <a href="#avaliacoes" className="hover:text-primary transition-colors">
-            Avaliacoes
-          </a>
-          <a href="#faq" className="hover:text-primary transition-colors">
-            FAQ
-          </a>
-        </nav>
-
         <div className="flex items-center gap-3">
           {session?.user ? (
             <div className="relative" ref={menuRef}>

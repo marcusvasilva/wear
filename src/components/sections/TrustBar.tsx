@@ -1,4 +1,7 @@
-import { Truck, CreditCard, ShieldCheck, RotateCcw } from "lucide-react";
+"use client";
+
+import { Truck, CreditCard, ShieldCheck, Headphones } from "lucide-react";
+import { AnimateIn } from "@/components/ui/AnimateIn";
 
 const trustItems = [
   {
@@ -14,12 +17,12 @@ const trustItems = [
   {
     icon: ShieldCheck,
     titulo: "100% Seguro",
-    descricao: "Checkout protegido",
+    descricao: "Checkout protegido e criptografado",
   },
   {
-    icon: RotateCcw,
-    titulo: "Troca Garantida",
-    descricao: "Garantia de qualidade",
+    icon: Headphones,
+    titulo: "Suporte no pós-venda",
+    descricao: "Atendimento real via WhatsApp",
   },
 ];
 
@@ -28,16 +31,18 @@ export function TrustBar() {
     <section className="border-y border-border bg-white">
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {trustItems.map((item) => (
-            <div key={item.titulo} className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-light flex items-center justify-center">
-                <item.icon size={20} className="text-primary" />
+          {trustItems.map((item, index) => (
+            <AnimateIn key={item.titulo} delay={index * 100}>
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-light flex items-center justify-center">
+                  <item.icon size={20} className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-text">{item.titulo}</p>
+                  <p className="text-xs text-text-muted">{item.descricao}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-text">{item.titulo}</p>
-                <p className="text-xs text-text-muted">{item.descricao}</p>
-              </div>
-            </div>
+            </AnimateIn>
           ))}
         </div>
       </div>

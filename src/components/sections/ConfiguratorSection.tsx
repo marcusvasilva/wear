@@ -1,12 +1,12 @@
 "use client";
 
 import { useConfigurator } from "@/hooks/useConfigurator";
-import { modelos, tamanhos, bases, extras } from "@/data/products";
+import { modelos, tamanhos, bases } from "@/data/products";
 import { StepSelector } from "@/components/configurator/StepSelector";
 import { OptionCard } from "@/components/configurator/OptionCard";
 import { QuantitySelector } from "@/components/configurator/QuantitySelector";
 import { OrderSummary } from "@/components/configurator/OrderSummary";
-import type { ModeloId, TamanhoId, BaseId, ExtraId } from "@/types";
+import type { ModeloId, TamanhoId, BaseId } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
 export function ConfiguratorSection() {
@@ -17,16 +17,15 @@ export function ConfiguratorSection() {
     setModelo,
     setTamanho,
     setBase,
-    toggleExtra,
     setQuantidade,
   } = useConfigurator();
 
   return (
     <section id="configurador" className="bg-gray-50 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
-        <h2 className="text-2xl lg:text-3xl font-bold text-text mb-2">Configuracao</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold text-text mb-2">Monte seu Wind Banner</h2>
         <p className="text-sm text-text-muted mb-8">
-          Monte seu Wind Banner personalizado em poucos passos
+          Configure e compre seu Wind Banner em poucos passos
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -84,24 +83,8 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 4: Extras */}
-            <StepSelector numero={4} titulo="Extras" descricao="Adicione itens opcionais">
-              <div className="grid grid-cols-2 gap-3">
-                {extras.map((extra) => (
-                  <OptionCard
-                    key={extra.id}
-                    nome={extra.nome}
-                    descricao={extra.preco > 0 ? `+${formatCurrency(extra.preco)}` : "Consultar preco"}
-                    imagem={extra.imagem}
-                    selected={config.extras.includes(extra.id as ExtraId)}
-                    onClick={() => toggleExtra(extra.id as ExtraId)}
-                  />
-                ))}
-              </div>
-            </StepSelector>
-
-            {/* Step 5: Quantidade */}
-            <StepSelector numero={5} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
+            {/* Step 4: Quantidade */}
+            <StepSelector numero={4} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
               <QuantitySelector
                 quantidade={config.quantidade}
                 precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}

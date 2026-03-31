@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="bg-header-bg text-gray-400">
       <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <Image
               src="/logos/logo-wear-white.png"
@@ -14,18 +14,8 @@ export function Footer() {
               className="h-8 w-auto mb-4"
             />
             <p className="text-sm leading-relaxed">
-              Sublimação de alta qualidade para Wind Banners, camisetas, canecas e muito mais.
+              Sublimação de alta qualidade para Wind Banners. Produção própria, impressão premium e envio rápido.
             </p>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-3 text-sm">Produtos</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Wind Banners</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Bandeiras</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Camisetas</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Canecas</a></li>
-            </ul>
           </div>
 
           <div>

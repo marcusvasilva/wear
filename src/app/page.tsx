@@ -10,6 +10,7 @@ import { ConfiguratorSection } from "@/components/sections/ConfiguratorSection";
 import { GuaranteeSection } from "@/components/sections/GuaranteeSection";
 import { SocialProofSection } from "@/components/sections/SocialProofSection";
 import { FAQSection } from "@/components/sections/FAQSection";
+import { GabaritoSection } from "@/components/sections/GabaritoSection";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
         <ConfiguratorSection />
         <GuaranteeSection />
         <SocialProofSection />
+        <GabaritoSection />
         <FAQSection />
       </main>
       <Footer />

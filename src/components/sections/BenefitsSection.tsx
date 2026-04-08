@@ -1,6 +1,6 @@
 "use client";
 
-import { Factory, Palette, Shield, Zap, MessageCircle } from "lucide-react";
+import { Factory, Palette, Shield, Zap, MessageCircle, PenTool, ImageIcon } from "lucide-react";
 import { AnimateIn } from "@/components/ui/AnimateIn";
 
 const benefits = [
@@ -34,6 +34,12 @@ const benefits = [
     descricao:
       "Suporte real via WhatsApp do início ao fim. Sem robôs, sem espera.",
   },
+  {
+    icon: PenTool,
+    titulo: "Criamos a arte pra você",
+    descricao:
+      "Não tem designer? Sem problema. Nossa equipe cria o layout do seu Wind Banner do zero.",
+  },
 ];
 
 export function BenefitsSection() {
@@ -41,9 +47,22 @@ export function BenefitsSection() {
     <section className="bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:py-20">
         <AnimateIn>
-          <h2 className="text-2xl lg:text-3xl font-bold text-text text-center mb-12">
+          <h2 className="text-2xl lg:text-3xl font-bold text-text text-center mb-10">
             Por que escolher a Wear Sublimações pra produzir seu Wind Banner?
           </h2>
+        </AnimateIn>
+
+        {/* Placeholder: vídeo institucional ou carrossel de fotos da fábrica */}
+        <AnimateIn className="mb-12">
+          <div className="relative aspect-video max-w-4xl mx-auto bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-8 text-center">
+            <ImageIcon size={48} className="text-gray-400 mb-4" />
+            <p className="text-sm text-gray-500 font-medium">
+              Vídeo institucional ou carrossel de imagens da fábrica
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Linha de produção, sublimação, costura e embalagem
+            </p>
+          </div>
         </AnimateIn>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

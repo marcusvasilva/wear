@@ -1,14 +1,14 @@
 "use client";
 
-import { Paintbrush, Sun, CloudRain, Wrench, Clock } from "lucide-react";
+import { ShoppingCart, Sun, CloudRain, Wrench, Clock, Truck } from "lucide-react";
 import { AnimateIn } from "@/components/ui/AnimateIn";
 
 const objections = [
   {
-    icon: Paintbrush,
-    question: "Não tenho a arte pronta!",
+    icon: ShoppingCart,
+    question: "Posso pedir só 1 unidade?",
     answer:
-      "Sem problema. Nós criamos a arte do seu Wind Banner do zero, incluso no serviço.",
+      "Sim. Não tem pedido mínimo. Você pode comprar uma unidade e já aproveitar o desconto por quantidade se quiser mais.",
   },
   {
     icon: Sun,
@@ -34,6 +34,12 @@ const objections = [
     answer:
       "Com a arte pronta e aprovada, produzimos e enviamos em até 48 horas úteis. Se precisar, também criamos a arte nesse prazo.",
   },
+  {
+    icon: Truck,
+    question: "Vocês entregam na minha cidade?",
+    answer:
+      "Sim. Enviamos para todo o Brasil pelos Correios e transportadoras. O frete é calculado automaticamente no pedido.",
+  },
 ];
 
 export function ObjectionsSection() {
@@ -46,7 +52,7 @@ export function ObjectionsSection() {
           </h2>
         </AnimateIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {objections.map((item, index) => (
             <AnimateIn key={item.question} delay={index * 100}>
               <div className="flex gap-4 p-5 bg-gray-50 rounded-xl h-full">

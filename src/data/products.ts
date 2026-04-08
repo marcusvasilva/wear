@@ -83,6 +83,7 @@ export const bases: Base[] = [
     nome: "Haste + Tecido",
     descricao: "Haste de aluminio + bandeira",
     precoAdicional: 4500, // TODO: preencher com preco real
+    // TODO: substituir por imagem de haste + tecido (sem base)
     imagem: `${CDN}/Base_Padrao_Preto_1ff153c0ee.png`,
   },
   {
@@ -90,6 +91,7 @@ export const bases: Base[] = [
     nome: "Base + Haste + Tecido",
     descricao: "Kit completo: base + haste + bandeira",
     precoAdicional: 8900, // TODO: preencher com preco real
+    // TODO: substituir por imagem mostrando base + haste + tecido juntos
     imagem: `${CDN}/Base_Premium_Preto_5d855cd95d.png`,
   },
 ];

@@ -5,15 +5,15 @@ import { AnimateIn } from "@/components/ui/AnimateIn";
 
 const placeholders = [
   {
-    label: "Imagem comparativa: loja com Wind Banner vs sem Wind Banner",
+    label: "Carrossel antes/depois: fachada de loja sem Wind Banner → com Wind Banner (scroll lateral com transição)",
     caption: "Antes e depois",
   },
   {
-    label: "Imagem de vários banners juntos mostrando os formatos disponíveis",
+    label: "Mesma arte aplicada em cada formato de Wind Banner (Pena, Faca, Gota, Vela) para visualizar as opções",
     caption: "Modelos e formatos",
   },
   {
-    label: "Imagem de uso em eventos, corridas e ações externas",
+    label: "Carrossel antes/depois: evento de corrida sem Wind Banner → com Wind Banner na linha de chegada",
     caption: "Uso em eventos",
   },
 ];

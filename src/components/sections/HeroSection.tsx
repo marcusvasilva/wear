@@ -15,7 +15,7 @@ export function HeroSection() {
             </span>
 
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
-              Produzimos a arte do seu Wind Banner em até 48 horas
+              Seu Wind Banner com a sua marca, pronto em 48h, direto da fábrica.
             </h1>
 
             <p className="text-lg text-gray-300 leading-relaxed">
@@ -26,7 +26,7 @@ export function HeroSection() {
             <ul className="space-y-2.5">
               {[
                 "Impressão premium com cores que não desbotam",
-                "Tecido e estrutura resistentes a intempéries",
+                "Tecido e estrutura resistentes",
                 "Produção e envio em até 48h úteis",
                 "Atendimento humano via WhatsApp",
               ].map((item) => (
@@ -42,7 +42,7 @@ export function HeroSection() {
                 href="#configurador"
                 className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-bold text-base px-8 py-3.5 rounded-lg transition-colors"
               >
-                Configurar meu Wind Banner
+                Comprar meu Wind Banner
                 <ArrowRight size={18} />
               </a>
               <a
@@ -61,10 +61,10 @@ export function HeroSection() {
             <div className="relative aspect-[4/3] bg-gray-800 rounded-2xl border-2 border-dashed border-gray-600 flex flex-col items-center justify-center p-8 text-center">
               <ImageIcon size={48} className="text-gray-500 mb-4" />
               <p className="text-sm text-gray-400 font-medium">
-                Imagem principal do Wind Banner aqui
+                Wind Banner aplicado em ambiente real
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Banner hero com produto em destaque
+                Imagem realista ou vídeo dinâmico com Wind Banner em uso
               </p>
             </div>
           </AnimateIn>

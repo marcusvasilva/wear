@@ -65,7 +65,7 @@ export function HowItWorksSection() {
             href="#configurador"
             className="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-bold text-base px-8 py-3.5 rounded-lg transition-colors"
           >
-            Configurar agora
+            Comprar agora
           </a>
         </AnimateIn>
       </div>

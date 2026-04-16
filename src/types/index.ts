@@ -32,6 +32,7 @@ export interface Base {
   descricao: string;
   precoAdicional: number; // centavos
   imagem: string;
+  imagensPorModelo?: Record<ModeloId, string>;
 }
 
 export interface Extra {

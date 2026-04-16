@@ -22,11 +22,11 @@ export function Header() {
   }, []);
 
   return (
-    <header className="bg-white border-b border-border sticky top-0 z-50">
+    <header className="bg-black/30 backdrop-blur-md border-b border-white/10 fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-4 flex items-center justify-between h-[72px]">
         <Link href="/">
           <Image
-            src="/logos/logo-wear-black.png"
+            src="/logos/logo-wear-white.png"
             alt="Wear Sublimacoes"
             width={140}
             height={40}
@@ -39,7 +39,7 @@ export function Header() {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 text-sm font-medium text-text hover:text-primary transition-colors"
+                className="flex items-center gap-2 text-sm font-medium text-white hover:text-primary transition-colors"
                 aria-label="Menu do usuario"
               >
                 {session.user.image ? (
@@ -83,7 +83,7 @@ export function Header() {
           ) : (
             <Link
               href="/login"
-              className="flex items-center gap-1.5 text-sm font-medium text-text hover:text-primary transition-colors"
+              className="flex items-center gap-1.5 text-sm font-medium text-white hover:text-primary transition-colors"
             >
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">Entrar</span>

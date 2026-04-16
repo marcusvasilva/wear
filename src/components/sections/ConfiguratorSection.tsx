@@ -66,20 +66,26 @@ export function ConfiguratorSection() {
             {/* Step 3: Base e Estrutura */}
             <StepSelector numero={3} titulo="Base e Estrutura" descricao="Escolha como montar seu Wind Banner">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {bases.map((base) => (
-                  <OptionCard
-                    key={base.id}
-                    nome={base.nome}
-                    descricao={
-                      base.precoAdicional > 0
-                        ? `${base.descricao} (+${formatCurrency(base.precoAdicional)})`
-                        : base.descricao
-                    }
-                    imagem={base.imagem}
-                    selected={config.base === base.id}
-                    onClick={() => setBase(base.id as BaseId)}
-                  />
-                ))}
+                {bases.map((base) => {
+                  const imagemBase =
+                    config.modelo && base.imagensPorModelo
+                      ? base.imagensPorModelo[config.modelo]
+                      : base.imagem;
+                  return (
+                    <OptionCard
+                      key={base.id}
+                      nome={base.nome}
+                      descricao={
+                        base.precoAdicional > 0
+                          ? `${base.descricao} (+${formatCurrency(base.precoAdicional)})`
+                          : base.descricao
+                      }
+                      imagem={imagemBase}
+                      selected={config.base === base.id}
+                      onClick={() => setBase(base.id as BaseId)}
+                    />
+                  );
+                })}
               </div>
             </StepSelector>
 

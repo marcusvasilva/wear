@@ -45,6 +45,8 @@ export async function POST(request: Request) {
     tecido: "bora",
     base: input.base,
     extras: input.extras,
+    arte: input.arte,
+    quantidadeArtes: input.quantidadeArtes,
     quantidade: input.quantidade,
   };
 

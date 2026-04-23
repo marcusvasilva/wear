@@ -2,10 +2,11 @@
 
 import type { ConfiguracaoSelecionada } from "@/types";
 import { modelos, tamanhos, bases } from "@/data/products";
+import { DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
 import { saveCheckoutConfig } from "@/lib/checkout-storage";
 import { FreightCalculator } from "./FreightCalculator";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Clock } from "lucide-react";
 
 interface OrderSummaryProps {
   config: ConfiguracaoSelecionada;
@@ -13,6 +14,7 @@ interface OrderSummaryProps {
     precoBase: number;
     precoAdicionalBase: number;
     precoExtras: number;
+    precoArtes: number;
     subtotal: number;
     descontoPercentual: number;
     descontoValor: number;
@@ -46,6 +48,16 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
         {config.extras.length > 0 && (
           <SummaryLine label="Extras" value={`${config.extras.length} selecionado(s)`} />
         )}
+        <SummaryLine
+          label="Arte"
+          value={
+            config.arte === "enviar-arte"
+              ? "Cliente envia"
+              : config.arte === "wear-cria-arte"
+                ? `Wear cria (${config.quantidadeArtes}x)`
+                : undefined
+          }
+        />
         <SummaryLine label="Quantidade" value={String(config.quantidade)} />
       </div>
 
@@ -66,6 +78,14 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
               <span className="text-primary font-medium">-{formatCurrency(preco.descontoValor)}</span>
             </div>
           )}
+          {preco.precoArtes > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-text-muted">
+                Arte ({config.quantidadeArtes}x)
+              </span>
+              <span className="text-text">+{formatCurrency(preco.precoArtes)}</span>
+            </div>
+          )}
           <div className="flex justify-between items-baseline">
             <span className="text-sm font-semibold text-text">Total</span>
             <span className="text-2xl font-bold text-price-red">{formatCurrency(preco.total)}</span>
@@ -73,6 +93,14 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
           <p className="text-xs text-text-muted text-right">
             {formatInstallment(preco.total)}
           </p>
+          {config.arte === "wear-cria-arte" && (
+            <div className="flex items-start gap-1.5 mt-2 p-2 bg-blue/5 border border-blue/20 rounded-lg">
+              <Clock size={12} className="text-blue flex-shrink-0 mt-0.5" />
+              <p className="text-[11px] text-text leading-snug">
+                +{DIAS_ADICIONAIS_ARTE_WEAR} dias úteis no prazo para desenvolvimento da arte
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-sm text-text-muted text-center py-2">
@@ -87,6 +115,7 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
         base={config.base}
         tamanho={config.tamanho}
         quantidade={config.quantidade}
+        arte={config.arte}
       />
 
       {/* Botao comprar */}

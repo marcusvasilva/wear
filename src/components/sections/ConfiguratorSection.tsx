@@ -5,6 +5,7 @@ import { modelos, tamanhos, bases } from "@/data/products";
 import { StepSelector } from "@/components/configurator/StepSelector";
 import { OptionCard } from "@/components/configurator/OptionCard";
 import { QuantitySelector } from "@/components/configurator/QuantitySelector";
+import { ArteStep } from "@/components/configurator/ArteStep";
 import { OrderSummary } from "@/components/configurator/OrderSummary";
 import type { ModeloId, TamanhoId, BaseId } from "@/types";
 import { formatCurrency } from "@/lib/utils";
@@ -17,6 +18,8 @@ export function ConfiguratorSection() {
     setModelo,
     setTamanho,
     setBase,
+    setArte,
+    setQuantidadeArtes,
     setQuantidade,
   } = useConfigurator();
 
@@ -89,8 +92,22 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 4: Quantidade */}
-            <StepSelector numero={4} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
+            {/* Step 4: Arte e Personalizacao */}
+            <StepSelector
+              numero={4}
+              titulo="Arte e Personalização"
+              descricao="Você envia a arte ou a gente cria pra você"
+            >
+              <ArteStep
+                arte={config.arte}
+                quantidadeArtes={config.quantidadeArtes}
+                onChangeArte={setArte}
+                onChangeQuantidadeArtes={setQuantidadeArtes}
+              />
+            </StepSelector>
+
+            {/* Step 5: Quantidade */}
+            <StepSelector numero={5} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
               <QuantitySelector
                 quantidade={config.quantidade}
                 precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}

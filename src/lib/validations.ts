@@ -41,6 +41,8 @@ export const checkoutSchema = z.object({
   tamanho: z.enum(["p", "m", "g", "gg"]),
   base: z.enum(["sem-base", "haste-tecido", "base-haste-tecido"]),
   extras: z.array(z.enum(["bandeira-reserva", "capa-protetora"])).default([]),
+  arte: z.enum(["enviar-arte", "wear-cria-arte"]),
+  quantidadeArtes: z.number().int().min(1).max(1000).default(1),
   quantidade: z.number().int().min(1).max(1000),
 
   // Shipping

@@ -2,6 +2,13 @@
 // Chave: "modelo-tamanho-bora" -> preco base em centavos
 // TODO: substituir por precos reais da Wear Sublimacoes
 // Valores atuais baseados no Tiny ERP (~R$66,44 para tamanho M)
+
+// R$ 25,00 por arte criada pela Wear (nao acumula com desconto de quantidade)
+export const PRECO_ARTE_WEAR = 2500;
+
+// Dias uteis adicionais quando a Wear cria a arte
+export const DIAS_ADICIONAIS_ARTE_WEAR = 2;
+
 export const precos: Record<string, number> = {
   "pena-p-bora": 5990,
   "pena-m-bora": 6644,

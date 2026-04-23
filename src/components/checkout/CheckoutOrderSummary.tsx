@@ -1,9 +1,10 @@
 "use client";
 
 import { modelos, tamanhos, bases } from "@/data/products";
+import { DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
 import type { ConfiguracaoSelecionada, ShippingOption } from "@/types";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2, ShieldCheck, Clock } from "lucide-react";
 
 interface CheckoutOrderSummaryProps {
   config: ConfiguracaoSelecionada;
@@ -11,6 +12,7 @@ interface CheckoutOrderSummaryProps {
     precoBase: number;
     precoAdicionalBase: number;
     precoExtras: number;
+    precoArtes: number;
     subtotal: number;
     descontoPercentual: number;
     descontoValor: number;
@@ -53,6 +55,14 @@ export function CheckoutOrderSummary({
           <span className="font-medium text-text">{baseNome}</span>
         </div>
         <div className="flex justify-between">
+          <span className="text-text-muted">Arte</span>
+          <span className="font-medium text-text">
+            {config.arte === "enviar-arte"
+              ? "Cliente envia"
+              : `Wear cria (${config.quantidadeArtes}x)`}
+          </span>
+        </div>
+        <div className="flex justify-between">
           <span className="text-text-muted">Quantidade</span>
           <span className="font-medium text-text">{config.quantidade}</span>
         </div>
@@ -73,6 +83,12 @@ export function CheckoutOrderSummary({
             </div>
           </>
         )}
+        {preco.precoArtes > 0 && (
+          <div className="flex justify-between">
+            <span className="text-text-muted">Arte ({config.quantidadeArtes}x)</span>
+            <span className="text-text">+{formatCurrency(preco.precoArtes)}</span>
+          </div>
+        )}
         <div className="flex justify-between">
           <span className="text-text-muted">Produtos</span>
           <span className="text-text">{formatCurrency(preco.total)}</span>
@@ -83,6 +99,14 @@ export function CheckoutOrderSummary({
             {shipping ? formatCurrency(shipping.price) : "\u2014"}
           </span>
         </div>
+        {config.arte === "wear-cria-arte" && (
+          <div className="flex items-start gap-1.5 mt-2 p-2 bg-blue/5 border border-blue/20 rounded-lg">
+            <Clock size={12} className="text-blue flex-shrink-0 mt-0.5" />
+            <p className="text-[11px] text-text leading-snug">
+              +{DIAS_ADICIONAIS_ARTE_WEAR} dias \u00fateis no prazo para desenvolvimento da arte
+            </p>
+          </div>
+        )}
       </div>
 
       <hr className="border-border" />

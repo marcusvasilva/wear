@@ -145,6 +145,8 @@ export function CheckoutStepper() {
           tamanho: config.tamanho,
           base: config.base,
           extras: config.extras,
+          arte: config.arte,
+          quantidadeArtes: config.quantidadeArtes,
           quantidade: config.quantidade,
           addressId: finalAddressId,
           shippingOptionId: selectedShipping.id,
@@ -184,7 +186,7 @@ export function CheckoutStepper() {
     );
   }
 
-  if (!config.modelo || !config.tamanho || !config.base) {
+  if (!config.modelo || !config.tamanho || !config.base || !config.arte) {
     return (
       <div className="text-center py-16">
         <p className="text-text-muted mb-4">Configuracao incompleta. Selecione todas as opcoes.</p>

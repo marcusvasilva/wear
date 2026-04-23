@@ -1,5 +1,5 @@
 import type { ConfiguracaoSelecionada } from "@/types";
-import { precos } from "@/data/prices";
+import { precos, PRECO_ARTE_WEAR } from "@/data/prices";
 import { bases, extras, descontos } from "@/data/products";
 
 /**
@@ -9,18 +9,29 @@ export function calcularPreco(config: ConfiguracaoSelecionada): {
   precoBase: number;
   precoAdicionalBase: number;
   precoExtras: number;
+  precoArtes: number;
   subtotal: number;
   descontoPercentual: number;
   descontoValor: number;
   total: number;
 } {
-  const { modelo, tamanho, tecido, base, extras: extrasSelecionados, quantidade } = config;
+  const {
+    modelo,
+    tamanho,
+    tecido,
+    base,
+    extras: extrasSelecionados,
+    arte,
+    quantidadeArtes,
+    quantidade,
+  } = config;
 
   if (!modelo || !tamanho) {
     return {
       precoBase: 0,
       precoAdicionalBase: 0,
       precoExtras: 0,
+      precoArtes: 0,
       subtotal: 0,
       descontoPercentual: 0,
       descontoValor: 0,
@@ -48,12 +59,17 @@ export function calcularPreco(config: ConfiguracaoSelecionada): {
 
   const descontoPercentual = descontoAplicavel?.descontoPercentual ?? 0;
   const descontoValor = Math.round(subtotal * (descontoPercentual / 100));
-  const total = subtotal - descontoValor;
+
+  const precoArtes =
+    arte === "wear-cria-arte" ? Math.max(1, quantidadeArtes) * PRECO_ARTE_WEAR : 0;
+
+  const total = subtotal - descontoValor + precoArtes;
 
   return {
     precoBase,
     precoAdicionalBase,
     precoExtras,
+    precoArtes,
     subtotal,
     descontoPercentual,
     descontoValor,

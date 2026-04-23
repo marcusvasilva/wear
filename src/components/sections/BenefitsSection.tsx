@@ -1,6 +1,6 @@
 "use client";
 
-import { Factory, Palette, Shield, Zap, MessageCircle, PenTool, ImageIcon } from "lucide-react";
+import { Factory, Palette, Shield, Zap, MessageCircle, PenTool } from "lucide-react";
 import { AnimateIn } from "@/components/ui/AnimateIn";
 
 const benefits = [
@@ -52,16 +52,15 @@ export function BenefitsSection() {
           </h2>
         </AnimateIn>
 
-        {/* Placeholder: vídeo institucional ou carrossel de fotos da fábrica */}
         <AnimateIn className="mb-12">
-          <div className="relative aspect-video max-w-4xl mx-auto bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-8 text-center">
-            <ImageIcon size={48} className="text-gray-400 mb-4" />
-            <p className="text-sm text-gray-500 font-medium">
-              Vídeo institucional ou carrossel de imagens da fábrica
-            </p>
-            <p className="text-xs text-gray-400 mt-1">
-              Linha de produção, sublimação, costura e embalagem
-            </p>
+          <div className="relative aspect-video max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-lg bg-black">
+            <iframe
+              src="https://www.youtube.com/embed/LCRX7r_S74E?rel=0"
+              title="Wear Sublimações — Wind Banner"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
           </div>
         </AnimateIn>
 

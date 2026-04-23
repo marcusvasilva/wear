@@ -3,6 +3,7 @@ export type TamanhoId = "p" | "m" | "g" | "gg";
 export type TecidoId = "bora";
 export type BaseId = "sem-base" | "haste-tecido" | "base-haste-tecido";
 export type ExtraId = "bandeira-reserva" | "capa-protetora";
+export type ArteId = "enviar-arte" | "wear-cria-arte";
 
 export interface Modelo {
   id: ModeloId;
@@ -53,6 +54,8 @@ export interface ConfiguracaoSelecionada {
   tecido: TecidoId;
   base: BaseId | null;
   extras: ExtraId[];
+  arte: ArteId | null;
+  quantidadeArtes: number;
   quantidade: number;
 }
 

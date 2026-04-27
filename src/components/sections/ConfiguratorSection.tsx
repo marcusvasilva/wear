@@ -35,7 +35,12 @@ export function ConfiguratorSection() {
           {/* Steps */}
           <div className="lg:col-span-2 space-y-8">
             {/* Step 1: Modelo */}
-            <StepSelector numero={1} titulo="Modelo" descricao="Escolha o formato do seu Wind Banner">
+            <StepSelector
+              numero={1}
+              titulo="Modelo"
+              descricao="Escolha o formato do seu Wind Banner"
+              completo={config.modelo !== null}
+            >
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {modelos.map((modelo) => (
                   <OptionCard
@@ -51,7 +56,14 @@ export function ConfiguratorSection() {
             </StepSelector>
 
             {/* Step 2: Tamanho */}
-            <StepSelector numero={2} titulo="Tamanho" descricao="Selecione o tamanho ideal">
+            <StepSelector
+              numero={2}
+              titulo="Tamanho"
+              descricao="Selecione o tamanho ideal"
+              disabled={config.modelo === null}
+              completo={config.tamanho !== null}
+              mensagemBloqueio="Escolha o modelo primeiro"
+            >
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {tamanhos.map((tamanho) => (
                   <OptionCard
@@ -67,7 +79,14 @@ export function ConfiguratorSection() {
             </StepSelector>
 
             {/* Step 3: Base e Estrutura */}
-            <StepSelector numero={3} titulo="Base e Estrutura" descricao="Escolha como montar seu Wind Banner">
+            <StepSelector
+              numero={3}
+              titulo="Base e Estrutura"
+              descricao="Escolha como montar seu Wind Banner"
+              disabled={config.tamanho === null}
+              completo={config.base !== null}
+              mensagemBloqueio="Escolha o tamanho primeiro"
+            >
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {bases.map((base) => {
                   const imagemBase =
@@ -97,17 +116,28 @@ export function ConfiguratorSection() {
               numero={4}
               titulo="Arte e Personalização"
               descricao="Você envia a arte ou a gente cria pra você"
+              disabled={config.base === null}
+              completo={config.arte !== null}
+              mensagemBloqueio="Escolha a base e estrutura primeiro"
             >
               <ArteStep
                 arte={config.arte}
                 quantidadeArtes={config.quantidadeArtes}
+                modeloSelecionado={config.modelo}
+                tamanhoSelecionado={config.tamanho}
                 onChangeArte={setArte}
                 onChangeQuantidadeArtes={setQuantidadeArtes}
               />
             </StepSelector>
 
             {/* Step 5: Quantidade */}
-            <StepSelector numero={5} titulo="Quantidade" descricao="Quantidade maior = desconto maior">
+            <StepSelector
+              numero={5}
+              titulo="Quantidade"
+              descricao="Quantidade maior = desconto maior"
+              disabled={config.arte === null}
+              mensagemBloqueio="Escolha a opção de arte primeiro"
+            >
               <QuantitySelector
                 quantidade={config.quantidade}
                 precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}

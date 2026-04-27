@@ -11,6 +11,11 @@ interface QuantitySelectorProps {
 }
 
 export function QuantitySelector({ quantidade, precoUnitario, onChange }: QuantitySelectorProps) {
+  const tierAtivo = descontos.reduce<number | null>(
+    (acc, d) => (quantidade >= d.minQty ? d.minQty : acc),
+    null,
+  );
+
   return (
     <div className="space-y-4">
       {/* Seletor */}
@@ -44,12 +49,13 @@ export function QuantitySelector({ quantidade, precoUnitario, onChange }: Quanti
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {descontos.map((d) => {
             const precoComDesconto = Math.round(precoUnitario * (1 - d.descontoPercentual / 100));
+            const isAtivo = tierAtivo === d.minQty;
             return (
               <button
                 key={d.minQty}
                 onClick={() => onChange(d.minQty)}
                 className={`p-2.5 rounded-xl border-2 text-center transition-all ${
-                  quantidade >= d.minQty
+                  isAtivo
                     ? "border-primary bg-primary-light"
                     : "border-border hover:border-gray-300"
                 }`}

@@ -1,14 +1,16 @@
 "use client";
 
 import { Download, FileText, Minus, Plus, Upload, Sparkles, AlertCircle } from "lucide-react";
-import { modelos } from "@/data/products";
+import { modelos, tamanhos } from "@/data/products";
 import { PRECO_ARTE_WEAR, DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import { formatCurrency } from "@/lib/utils";
-import type { ArteId } from "@/types";
+import type { ArteId, ModeloId, TamanhoId } from "@/types";
 
 interface ArteStepProps {
   arte: ArteId | null;
   quantidadeArtes: number;
+  modeloSelecionado: ModeloId | null;
+  tamanhoSelecionado: TamanhoId | null;
   onChangeArte: (arte: ArteId) => void;
   onChangeQuantidadeArtes: (qty: number) => void;
 }
@@ -16,9 +18,15 @@ interface ArteStepProps {
 export function ArteStep({
   arte,
   quantidadeArtes,
+  modeloSelecionado,
+  tamanhoSelecionado,
   onChangeArte,
   onChangeQuantidadeArtes,
 }: ArteStepProps) {
+  const modelo = modelos.find((m) => m.id === modeloSelecionado);
+  const tamanho = tamanhos.find((t) => t.id === tamanhoSelecionado);
+  const gabaritoUrl =
+    modelo && tamanhoSelecionado ? modelo.gabaritos[tamanhoSelecionado] : null;
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -40,33 +48,41 @@ export function ArteStep({
 
       {arte === "enviar-arte" && (
         <div className="p-4 bg-white border border-border rounded-xl space-y-3">
-          <p className="text-sm font-semibold text-text">
-            Baixe o gabarito do modelo escolhido
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {modelos.map((modelo) => (
+          {gabaritoUrl && modelo && tamanho ? (
+            <>
+              <p className="text-sm font-semibold text-text">
+                Gabarito da sua configuração
+              </p>
               <a
-                key={modelo.id}
-                href={modelo.gabaritoUrl}
+                href={gabaritoUrl}
                 download
-                className="flex items-center gap-2 p-2.5 border border-border rounded-lg hover:border-primary hover:bg-primary-light transition-all group"
+                className="flex items-center gap-3 p-3 border border-border rounded-lg hover:border-primary hover:bg-primary-light transition-all group"
               >
-                <div className="flex-shrink-0 w-8 h-8 rounded-md bg-gray-100 group-hover:bg-primary/10 flex items-center justify-center">
-                  <FileText size={14} className="text-text-muted group-hover:text-primary" />
+                <div className="flex-shrink-0 w-10 h-10 rounded-md bg-gray-100 group-hover:bg-primary/10 flex items-center justify-center">
+                  <FileText size={18} className="text-text-muted group-hover:text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-text truncate">
-                    {modelo.nome}
+                  <p className="text-sm font-semibold text-text truncate">
+                    Gabarito {modelo.nome} — {tamanho.nome}
                   </p>
-                  <p className="text-[10px] text-text-muted">PDF</p>
+                  <p className="text-xs text-text-muted">
+                    {tamanho.dimensoes} • PDF
+                  </p>
                 </div>
-                <Download size={12} className="text-text-muted group-hover:text-primary" />
+                <Download size={16} className="text-text-muted group-hover:text-primary" />
               </a>
-            ))}
-          </div>
-          <p className="text-xs text-text-muted">
-            A arte pode ser enviada após a compra por e-mail ou WhatsApp.
-          </p>
+              <p className="text-xs text-text-muted">
+                A arte pode ser enviada após a compra por e-mail ou WhatsApp.
+              </p>
+            </>
+          ) : (
+            <div className="flex items-start gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <AlertCircle size={16} className="text-yellow-700 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-text">
+                Selecione modelo e tamanho nos passos anteriores para baixar o gabarito correto.
+              </p>
+            </div>
+          )}
         </div>
       )}
 

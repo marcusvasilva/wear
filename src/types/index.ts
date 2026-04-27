@@ -10,7 +10,7 @@ export interface Modelo {
   nome: string;
   descricao: string;
   imagem: string;
-  gabaritoUrl: string;
+  gabaritos: Record<TamanhoId, string>;
 }
 
 export interface Tamanho {

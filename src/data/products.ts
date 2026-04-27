@@ -1,4 +1,16 @@
-import type { Modelo, Tamanho, Tecido, Base, Extra, DescontoQuantidade } from "@/types";
+import type { Modelo, ModeloId, Tamanho, TamanhoId, Tecido, Base, Extra, DescontoQuantidade } from "@/types";
+
+const TAMANHO_IDS: TamanhoId[] = ["p", "m", "g", "gg"];
+
+function buildGabaritos(modeloId: ModeloId): Record<TamanhoId, string> {
+  return TAMANHO_IDS.reduce(
+    (acc, tamanhoId) => {
+      acc[tamanhoId] = `/gabaritos/gabarito-${modeloId}-${tamanhoId}.pdf`;
+      return acc;
+    },
+    {} as Record<TamanhoId, string>,
+  );
+}
 
 export const modelos: Modelo[] = [
   {
@@ -6,28 +18,28 @@ export const modelos: Modelo[] = [
     nome: "Pena",
     descricao: "Formato classico curvo",
     imagem: "/images/modelos/pena.jpg",
-    gabaritoUrl: "/gabaritos/gabarito-pena.pdf",
+    gabaritos: buildGabaritos("pena"),
   },
   {
     id: "faca",
     nome: "Faca",
     descricao: "Formato retangular/reto",
     imagem: "/images/modelos/faca.jpg",
-    gabaritoUrl: "/gabaritos/gabarito-faca.pdf",
+    gabaritos: buildGabaritos("faca"),
   },
   {
     id: "gota",
     nome: "Gota",
     descricao: "Formato arredondado",
     imagem: "/images/modelos/gota.jpg",
-    gabaritoUrl: "/gabaritos/gabarito-gota.pdf",
+    gabaritos: buildGabaritos("gota"),
   },
   {
     id: "vela",
     nome: "Vela",
     descricao: "Formato pontiagudo",
     imagem: "/images/modelos/vela.jpg",
-    gabaritoUrl: "/gabaritos/gabarito-vela.pdf",
+    gabaritos: buildGabaritos("vela"),
   },
 ];
 

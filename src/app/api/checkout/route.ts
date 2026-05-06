@@ -181,18 +181,25 @@ export async function POST(request: Request) {
       boletoExpirationDate: transaction.boleto_expiration_date,
     });
   } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : "Erro desconhecido";
+    console.error("[checkout] payment processing failed", {
+      orderId: order.id,
+      error: errorMsg,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     // Marcar pedido como falho
     await db
       .update(orders)
       .set({
         status: "refused",
-        processingErrors: error instanceof Error ? error.message : "Erro desconhecido",
+        processingErrors: errorMsg,
         updatedAt: new Date(),
       })
       .where(eq(orders.id, order.id));
 
     return NextResponse.json(
-      { error: "Erro ao processar pagamento", orderId: order.id },
+      { error: "Erro ao processar pagamento", orderId: order.id, detail: errorMsg },
       { status: 500 }
     );
   }

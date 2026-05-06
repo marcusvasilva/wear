@@ -117,7 +117,23 @@ export async function createTransaction(
   const data = await response.json();
 
   if (!response.ok) {
-    const errorMsg = data?.errors?.map((e: { message: string }) => e.message).join(", ") ?? "Erro desconhecido";
+    console.error("[pagarme] transaction failed", {
+      status: response.status,
+      response: data,
+      requestSummary: {
+        amount: params.amount,
+        payment_method: params.paymentMethod,
+        installments: body.installments,
+        customer_doc: params.customer.documents[0]?.number?.slice(0, 3) + "***",
+        billing_zipcode: params.billing.address.zipcode,
+        items_count: params.items.length,
+        has_card_hash: Boolean(body.card_hash),
+      },
+    });
+    const errorMsg =
+      data?.errors?.map((e: { message: string; parameter_name?: string }) =>
+        e.parameter_name ? `${e.parameter_name}: ${e.message}` : e.message
+      ).join(" | ") ?? JSON.stringify(data);
     throw new Error(`Pagar.me error (${response.status}): ${errorMsg}`);
   }
 

@@ -4,9 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
-import { User, LogOut, ShoppingBag } from "lucide-react";
+import { User, LogOut, ShoppingBag, ShieldCheck } from "lucide-react";
 
-export function Header() {
+interface HeaderProps {
+  variant?: "transparent" | "solid";
+}
+
+export function Header({ variant = "transparent" }: HeaderProps) {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -21,8 +25,13 @@ export function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const headerClass =
+    variant === "solid"
+      ? "bg-header-bg border-b border-white/10 relative"
+      : "bg-black/30 backdrop-blur-md border-b border-white/10 fixed top-0 left-0 right-0 z-50";
+
   return (
-    <header className="bg-black/30 backdrop-blur-md border-b border-white/10 fixed top-0 left-0 right-0 z-50">
+    <header className={headerClass}>
       <div className="mx-auto max-w-7xl px-4 flex items-center justify-between h-[72px]">
         <Link href="/">
           <Image
@@ -70,6 +79,16 @@ export function Header() {
                     <ShoppingBag className="w-4 h-4" />
                     Meus Pedidos
                   </Link>
+                  {session.user.isAdmin && (
+                    <Link
+                      href="/admin/pedidos"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-text hover:bg-gray-50 transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      Painel Admin
+                    </Link>
+                  )}
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}
                     className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-text hover:bg-gray-50 transition-colors"
@@ -90,12 +109,12 @@ export function Header() {
             </Link>
           )}
 
-          <a
-            href="#configurador"
+          <Link
+            href="/#configurador"
             className="bg-primary hover:bg-primary-hover text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
           >
             Comprar
-          </a>
+          </Link>
         </div>
       </div>
     </header>

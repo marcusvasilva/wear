@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 
 import { db } from "./db";
 import * as schema from "./schema";
+import { isAdminEmail } from "./admin";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -70,11 +71,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
       }
+      token.isAdmin = isAdminEmail(token.email);
       return token;
     },
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;
+      }
+      if (session.user) {
+        session.user.isAdmin = Boolean(token.isAdmin);
       }
       return session;
     },

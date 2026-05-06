@@ -3,8 +3,8 @@
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 type Tab = "login" | "register";
 
@@ -17,11 +17,9 @@ function LoginContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Login form state
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  // Register form state
   const [registerName, setRegisterName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
@@ -83,7 +81,6 @@ function LoginContent() {
         return;
       }
 
-      // Auto-login after registration
       const loginResult = await signIn("credentials", {
         email: registerEmail,
         password: registerPassword,
@@ -104,30 +101,16 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 flex items-center justify-between h-[72px]">
-          <Link href="/">
-            <Image
-              src="/logos/logo-wear-black.png"
-              alt="Wear Sublimacoes"
-              width={140}
-              height={40}
-              className="h-8 w-auto"
-              priority
-            />
-          </Link>
-        </div>
-      </header>
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:py-8">
+      <div className="mb-4">
+        <Breadcrumb items={[{ label: "Entrar" }]} />
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
+      <div className="flex items-center justify-center px-4 py-8 sm:py-12">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-sm border border-border p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-border p-6 sm:p-8">
             <h1 className="text-2xl font-bold text-center mb-6">Minha Conta</h1>
 
-            {/* Tabs */}
             <div className="flex border-b border-border mb-6">
               <button
                 onClick={() => {
@@ -157,7 +140,6 @@ function LoginContent() {
               </button>
             </div>
 
-            {/* Error */}
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
                 {error}
@@ -166,7 +148,6 @@ function LoginContent() {
 
             {activeTab === "login" ? (
               <>
-                {/* Google Login */}
                 <button
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
@@ -202,7 +183,6 @@ function LoginContent() {
                   </div>
                 </div>
 
-                {/* Credentials Login */}
                 <form onSubmit={handleCredentialsLogin} className="space-y-4">
                   <div>
                     <label htmlFor="login-email" className="block text-sm font-medium mb-1.5">
@@ -242,7 +222,6 @@ function LoginContent() {
                 </form>
               </>
             ) : (
-              /* Register Form */
               <form onSubmit={handleRegister} className="space-y-4">
                 <div>
                   <label htmlFor="register-name" className="block text-sm font-medium mb-1.5">
@@ -338,7 +317,7 @@ function LoginContent() {
             .
           </p>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

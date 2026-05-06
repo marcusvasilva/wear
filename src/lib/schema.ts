@@ -99,6 +99,13 @@ export const orders = pgTable("orders", {
   paymentMethod: text("payment_method").notNull(),
   pagarmeTransactionId: text("pagarme_transaction_id"),
   pagarmeStatus: text("pagarme_status"),
+  // PIX
+  pixQrCode: text("pix_qr_code"),
+  pixExpirationDate: timestamp("pix_expiration_date", { mode: "date" }),
+  // Boleto
+  boletoUrl: text("boleto_url"),
+  boletoBarcode: text("boleto_barcode"),
+  boletoExpirationDate: text("boleto_expiration_date"),
   // Tiny ERP
   tinyPedidoId: text("tiny_pedido_id"),
   tinyNfeId: text("tiny_nfe_id"),

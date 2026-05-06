@@ -150,6 +150,13 @@ export async function POST(request: Request) {
         pagarmeTransactionId: String(transaction.id),
         pagarmeStatus: transaction.status,
         status: transaction.status === "paid" ? "paid" : "pending",
+        pixQrCode: transaction.pix_qr_code ?? null,
+        pixExpirationDate: transaction.pix_expiration_date
+          ? new Date(transaction.pix_expiration_date)
+          : null,
+        boletoUrl: transaction.boleto_url ?? null,
+        boletoBarcode: transaction.boleto_barcode ?? null,
+        boletoExpirationDate: transaction.boleto_expiration_date ?? null,
         updatedAt: new Date(),
       })
       .where(eq(orders.id, order.id));

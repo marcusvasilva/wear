@@ -108,6 +108,12 @@ export async function createTransaction(
     body.boleto_instructions = "Pagar ate o vencimento. Apos o vencimento, favor entrar em contato.";
   }
 
+  if (params.paymentMethod === "pix") {
+    const pixExpiration = new Date();
+    pixExpiration.setHours(pixExpiration.getHours() + 24);
+    body.pix_expiration_date = pixExpiration.toISOString();
+  }
+
   const response = await fetch(`${PAGARME_BASE_URL}/transactions`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

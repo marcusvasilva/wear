@@ -12,8 +12,10 @@ import { SocialProofSection } from "@/components/sections/SocialProofSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { GabaritoSection } from "@/components/sections/GabaritoSection";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
+import { getCatalog } from "@/lib/catalog";
 
-export default function Home() {
+export default async function Home() {
+  const catalog = await getCatalog();
   return (
     <>
       <Header />
@@ -24,10 +26,10 @@ export default function Home() {
         <BenefitsSection />
         <ObjectionsSection />
         <HowItWorksSection />
-        <ConfiguratorSection />
+        <ConfiguratorSection catalog={catalog} />
         <GuaranteeSection />
         <SocialProofSection />
-        <GabaritoSection />
+        <GabaritoSection catalog={catalog} />
         <FAQSection />
       </main>
       <Footer />

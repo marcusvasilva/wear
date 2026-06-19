@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Download, FileText } from "lucide-react";
-import { modelos, tamanhos } from "@/data/products";
-import type { ModeloId } from "@/types";
+import type { ModeloId, Catalog } from "@/types";
 
-export function GabaritoSection() {
-  const [modeloAtivo, setModeloAtivo] = useState<ModeloId>(modelos[0].id);
+export function GabaritoSection({ catalog }: { catalog: Catalog }) {
+  const { modelos, tamanhos } = catalog;
+  const [modeloAtivo, setModeloAtivo] = useState<ModeloId>(modelos[0]?.id ?? "");
   const modelo = modelos.find((m) => m.id === modeloAtivo) ?? modelos[0];
 
   return (

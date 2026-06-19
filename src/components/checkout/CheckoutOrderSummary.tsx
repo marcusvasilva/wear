@@ -1,12 +1,11 @@
 "use client";
 
-import { modelos, tamanhos, bases } from "@/data/products";
-import { DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
-import type { ConfiguracaoSelecionada, ShippingOption } from "@/types";
+import type { ConfiguracaoSelecionada, ShippingOption, Catalog } from "@/types";
 import { Loader2, ShieldCheck, Clock } from "lucide-react";
 
 interface CheckoutOrderSummaryProps {
+  catalog: Catalog;
   config: ConfiguracaoSelecionada;
   preco: {
     precoBase: number;
@@ -25,6 +24,7 @@ interface CheckoutOrderSummaryProps {
 }
 
 export function CheckoutOrderSummary({
+  catalog,
   config,
   preco,
   shipping,
@@ -32,9 +32,10 @@ export function CheckoutOrderSummary({
   loading,
   onSubmit,
 }: CheckoutOrderSummaryProps) {
-  const modeloNome = modelos.find((m) => m.id === config.modelo)?.nome;
-  const tamanhoInfo = tamanhos.find((t) => t.id === config.tamanho);
-  const baseNome = bases.find((b) => b.id === config.base)?.nome;
+  const DIAS_ADICIONAIS_ARTE_WEAR = catalog.diasAdicionaisArteWear;
+  const modeloNome = catalog.modelos.find((m) => m.id === config.modelo)?.nome;
+  const tamanhoInfo = catalog.tamanhos.find((t) => t.id === config.tamanho);
+  const baseNome = catalog.bases.find((b) => b.id === config.base)?.nome;
   const totalComFrete = preco.total + (shipping?.price ?? 0);
 
   return (

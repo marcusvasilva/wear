@@ -1,16 +1,17 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { descontos } from "@/data/products";
 import { formatCurrency } from "@/lib/utils";
+import type { DescontoQuantidade } from "@/types";
 
 interface QuantitySelectorProps {
+  descontos: DescontoQuantidade[];
   quantidade: number;
   precoUnitario: number;
   onChange: (qty: number) => void;
 }
 
-export function QuantitySelector({ quantidade, precoUnitario, onChange }: QuantitySelectorProps) {
+export function QuantitySelector({ descontos, quantidade, precoUnitario, onChange }: QuantitySelectorProps) {
   const tierAtivo = descontos.reduce<number | null>(
     (acc, d) => (quantidade >= d.minQty ? d.minQty : acc),
     null,

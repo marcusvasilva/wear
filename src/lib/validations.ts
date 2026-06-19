@@ -36,11 +36,11 @@ export const addressSchema = z.object({
 });
 
 export const checkoutSchema = z.object({
-  // Product config
-  modelo: z.enum(["pena", "faca", "gota", "vela"]),
-  tamanho: z.enum(["p", "m", "g", "gg"]),
-  base: z.enum(["sem-base", "haste-tecido", "base-haste-tecido"]),
-  extras: z.array(z.enum(["bandeira-reserva", "capa-protetora"])).default([]),
+  // Product config — slugs dinâmicos validados contra o catálogo no servidor
+  modelo: z.string().min(1),
+  tamanho: z.string().min(1),
+  base: z.string().min(1),
+  extras: z.array(z.string()).default([]),
   arte: z.enum(["enviar-arte", "wear-cria-arte"]),
   quantidadeArtes: z.number().int().min(1).max(1000).default(1),
   quantidade: z.number().int().min(1).max(1000),

@@ -7,6 +7,7 @@ import type {
   BaseId,
   ExtraId,
   ArteId,
+  Catalog,
 } from "@/types";
 import { calcularPreco } from "@/lib/price-calculator";
 import { TAMANHO_UNICO } from "@/data/products";
@@ -22,7 +23,7 @@ const INITIAL_STATE: ConfiguracaoSelecionada = {
   quantidade: 1,
 };
 
-export function useConfigurator() {
+export function useConfigurator(catalog: Catalog) {
   const [config, setConfig] = useState<ConfiguracaoSelecionada>(INITIAL_STATE);
 
   const setModelo = useCallback((modelo: ModeloId) => {
@@ -58,7 +59,7 @@ export function useConfigurator() {
     setConfig(INITIAL_STATE);
   }, []);
 
-  const preco = useMemo(() => calcularPreco(config), [config]);
+  const preco = useMemo(() => calcularPreco(config, catalog), [config, catalog]);
 
   const isComplete =
     config.modelo !== null &&

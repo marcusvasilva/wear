@@ -140,3 +140,76 @@ export const orderItems = pgTable("order_items", {
   precoTotalCentavos: integer("preco_total_centavos").notNull(),
   tinySku: text("tiny_sku"),
 });
+
+// ─── Catálogo de produtos (gerenciável pelo admin) ───
+// As imagens NAO ficam aqui: sao resolvidas por slug em src/data/catalog-images.ts.
+
+export const catalogModels = pgTable("catalog_models", {
+  slug: text("slug").primaryKey(),
+  nome: text("nome").notNull(),
+  descricao: text("descricao").notNull().default(""),
+  ativo: boolean("ativo").notNull().default(true),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const catalogSizes = pgTable("catalog_sizes", {
+  slug: text("slug").primaryKey(),
+  nome: text("nome").notNull(),
+  dimensoes: text("dimensoes").notNull().default(""),
+  ativo: boolean("ativo").notNull().default(true),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const catalogBases = pgTable("catalog_bases", {
+  slug: text("slug").primaryKey(),
+  nome: text("nome").notNull(),
+  descricao: text("descricao").notNull().default(""),
+  precoAdicionalCentavos: integer("preco_adicional_centavos").notNull().default(0),
+  ativo: boolean("ativo").notNull().default(true),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const catalogExtras = pgTable("catalog_extras", {
+  slug: text("slug").primaryKey(),
+  nome: text("nome").notNull(),
+  precoCentavos: integer("preco_centavos").notNull().default(0),
+  ativo: boolean("ativo").notNull().default(true),
+  sort: integer("sort").notNull().default(0),
+});
+
+export const catalogDiscounts = pgTable("catalog_discounts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  minQty: integer("min_qty").notNull(),
+  percentual: integer("percentual").notNull(),
+});
+
+// Preço base e gabarito por combinação modelo × tamanho
+export const catalogModelSize = pgTable(
+  "catalog_model_size",
+  {
+    modelSlug: text("model_slug").notNull(),
+    sizeSlug: text("size_slug").notNull(),
+    basePriceCentavos: integer("base_price_centavos").notNull().default(0),
+    gabaritoUrl: text("gabarito_url"),
+  },
+  (t) => [primaryKey({ columns: [t.modelSlug, t.sizeSlug] })]
+);
+
+// SKU do Tiny por combinação modelo × tamanho × base
+export const catalogSkus = pgTable(
+  "catalog_skus",
+  {
+    modelSlug: text("model_slug").notNull(),
+    sizeSlug: text("size_slug").notNull(),
+    baseSlug: text("base_slug").notNull(),
+    tinySku: text("tiny_sku"),
+  },
+  (t) => [primaryKey({ columns: [t.modelSlug, t.sizeSlug, t.baseSlug] })]
+);
+
+// Configurações gerais (preço de arte, dias adicionais, etc.)
+export const catalogSettings = pgTable("catalog_settings", {
+  key: text("key").primaryKey(),
+  valueInt: integer("value_int"),
+  valueText: text("value_text"),
+});

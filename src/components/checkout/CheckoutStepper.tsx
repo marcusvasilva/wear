@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { loadCheckoutConfig, clearCheckoutConfig } from "@/lib/checkout-storage";
 import { calcularPreco } from "@/lib/price-calculator";
-import type { ConfiguracaoSelecionada, ShippingOption } from "@/types";
+import type { ConfiguracaoSelecionada, ShippingOption, Catalog } from "@/types";
 import { StepIndicator } from "./StepIndicator";
 import { AccountStep } from "./steps/AccountStep";
 import { AddressShippingStep } from "./steps/AddressShippingStep";
@@ -26,7 +26,7 @@ interface AddressData {
   estado: string;
 }
 
-export function CheckoutStepper() {
+export function CheckoutStepper({ catalog }: { catalog: Catalog }) {
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
 
@@ -70,7 +70,7 @@ export function CheckoutStepper() {
     }
   }, [sessionStatus, session, currentStep]);
 
-  const preco = config ? calcularPreco(config) : null;
+  const preco = config ? calcularPreco(config, catalog) : null;
   const totalComFrete = (preco?.total ?? 0) + (selectedShipping?.price ?? 0);
 
   const handleAccountComplete = useCallback((user: { name: string; email: string }) => {
@@ -278,6 +278,7 @@ export function CheckoutStepper() {
           <div className="lg:sticky lg:top-8">
             {preco && (
               <CheckoutOrderSummary
+                catalog={catalog}
                 config={config}
                 preco={preco}
                 shipping={selectedShipping}

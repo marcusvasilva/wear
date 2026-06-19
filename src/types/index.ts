@@ -1,8 +1,10 @@
-export type ModeloId = "pena" | "faca" | "gota" | "vela";
-export type TamanhoId = "p" | "m" | "g" | "gg";
+// Os IDs de catálogo agora são dinâmicos (gerenciados no banco/admin),
+// por isso são `string`. Tecido e Arte continuam fixos por regra de negócio.
+export type ModeloId = string;
+export type TamanhoId = string;
 export type TecidoId = "bora";
-export type BaseId = "sem-base" | "haste-tecido" | "base-haste-tecido";
-export type ExtraId = "bandeira-reserva" | "capa-protetora";
+export type BaseId = string;
+export type ExtraId = string;
 export type ArteId = "enviar-arte" | "wear-cria-arte";
 
 export interface Modelo {
@@ -57,6 +59,23 @@ export interface ConfiguracaoSelecionada {
   arte: ArteId | null;
   quantidadeArtes: number;
   quantidade: number;
+}
+
+// Catálogo completo, montado a partir do banco (com fallback para os
+// defaults de código). É serializável para passar de Server -> Client Component.
+export interface Catalog {
+  modelos: Modelo[];
+  tamanhos: Tamanho[];
+  tecidos: Tecido[];
+  bases: Base[];
+  extras: Extra[];
+  descontos: DescontoQuantidade[];
+  // Chave "modelo-tamanho-tecido" -> preço base em centavos (mesma chave do calculador)
+  precosBase: Record<string, number>;
+  // Chave "modelo-tamanho-base" -> SKU do Tiny
+  skus: Record<string, string>;
+  precoArteWear: number;
+  diasAdicionaisArteWear: number;
 }
 
 // Checkout types

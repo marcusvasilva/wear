@@ -1,12 +1,11 @@
 "use client";
 
 import { Download, FileText, Minus, Plus, Upload, Sparkles, AlertCircle } from "lucide-react";
-import { modelos, tamanhos } from "@/data/products";
-import { PRECO_ARTE_WEAR, DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import { formatCurrency } from "@/lib/utils";
-import type { ArteId, ModeloId, TamanhoId } from "@/types";
+import type { ArteId, ModeloId, TamanhoId, Catalog } from "@/types";
 
 interface ArteStepProps {
+  catalog: Catalog;
   arte: ArteId | null;
   quantidadeArtes: number;
   modeloSelecionado: ModeloId | null;
@@ -16,6 +15,7 @@ interface ArteStepProps {
 }
 
 export function ArteStep({
+  catalog,
   arte,
   quantidadeArtes,
   modeloSelecionado,
@@ -23,8 +23,9 @@ export function ArteStep({
   onChangeArte,
   onChangeQuantidadeArtes,
 }: ArteStepProps) {
-  const modelo = modelos.find((m) => m.id === modeloSelecionado);
-  const tamanho = tamanhos.find((t) => t.id === tamanhoSelecionado);
+  const { precoArteWear: PRECO_ARTE_WEAR, diasAdicionaisArteWear: DIAS_ADICIONAIS_ARTE_WEAR } = catalog;
+  const modelo = catalog.modelos.find((m) => m.id === modeloSelecionado);
+  const tamanho = catalog.tamanhos.find((t) => t.id === tamanhoSelecionado);
   const gabaritoUrl =
     modelo && tamanhoSelecionado ? modelo.gabaritos[tamanhoSelecionado] : null;
   return (

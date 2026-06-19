@@ -1,14 +1,13 @@
 "use client";
 
-import type { ConfiguracaoSelecionada } from "@/types";
-import { modelos, tamanhos, bases } from "@/data/products";
-import { DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
+import type { ConfiguracaoSelecionada, Catalog } from "@/types";
 import { formatCurrency, formatInstallment } from "@/lib/utils";
 import { saveCheckoutConfig } from "@/lib/checkout-storage";
 import { FreightCalculator } from "./FreightCalculator";
 import { ShoppingCart, Clock } from "lucide-react";
 
 interface OrderSummaryProps {
+  catalog: Catalog;
   config: ConfiguracaoSelecionada;
   preco: {
     precoBase: number;
@@ -23,10 +22,11 @@ interface OrderSummaryProps {
   isComplete: boolean;
 }
 
-export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
-  const modeloNome = modelos.find((m) => m.id === config.modelo)?.nome;
-  const tamanhoInfo = tamanhos.find((t) => t.id === config.tamanho);
-  const baseNome = bases.find((b) => b.id === config.base)?.nome;
+export function OrderSummary({ catalog, config, preco, isComplete }: OrderSummaryProps) {
+  const DIAS_ADICIONAIS_ARTE_WEAR = catalog.diasAdicionaisArteWear;
+  const modeloNome = catalog.modelos.find((m) => m.id === config.modelo)?.nome;
+  const tamanhoInfo = catalog.tamanhos.find((t) => t.id === config.tamanho);
+  const baseNome = catalog.bases.find((b) => b.id === config.base)?.nome;
 
   const handleComprar = () => {
     saveCheckoutConfig(config);
@@ -113,6 +113,7 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
         tamanho={config.tamanho}
         quantidade={config.quantidade}
         arte={config.arte}
+        diasAdicionaisArteWear={DIAS_ADICIONAIS_ARTE_WEAR}
       />
 
       {/* Botao comprar */}

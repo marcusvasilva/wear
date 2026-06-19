@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { checkoutSchema } from "@/lib/validations";
 import { calcularPreco } from "@/lib/price-calculator";
 import { createTransaction, generateCardHash } from "@/lib/pagarme";
-import { getSku } from "@/data/sku-mapping";
+import { getCatalog, getSkuFromCatalog } from "@/lib/catalog";
 import type { ConfiguracaoSelecionada } from "@/types";
 
 export async function POST(request: Request) {
@@ -38,6 +38,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Endereco nao encontrado" }, { status: 400 });
   }
 
+  // Catálogo (banco, com fallback de código) — fonte da verdade dos preços/SKUs
+  const catalog = await getCatalog();
+
+  // Validar que os slugs selecionados existem e estão ativos no catálogo
+  const modeloOk = catalog.modelos.some((m) => m.id === input.modelo);
+  const tamanhoOk = catalog.tamanhos.some((t) => t.id === input.tamanho);
+  const baseOk = catalog.bases.some((b) => b.id === input.base);
+  const extrasOk = input.extras.every((e) => catalog.extras.some((c) => c.id === e));
+  if (!modeloOk || !tamanhoOk || !baseOk || !extrasOk) {
+    return NextResponse.json(
+      { error: "Produto indisponível ou configuração inválida" },
+      { status: 400 }
+    );
+  }
+
   // Recalcular preco server-side (nunca confiar no client)
   const config: ConfiguracaoSelecionada = {
     modelo: input.modelo,
@@ -50,7 +65,7 @@ export async function POST(request: Request) {
     quantidade: input.quantidade,
   };
 
-  const preco = calcularPreco(config);
+  const preco = calcularPreco(config, catalog);
   const totalComFrete = preco.total + input.shippingPrice;
 
   // Gerar o card_hash ANTES de criar o pedido, para falhar rapido sem deixar
@@ -95,7 +110,7 @@ export async function POST(request: Request) {
     .returning();
 
   // Criar itens do pedido
-  const sku = getSku(input.modelo, input.tamanho, input.base);
+  const sku = getSkuFromCatalog(catalog, input.modelo, input.tamanho, input.base);
 
   await db.insert(orderItems).values({
     orderId: order.id,

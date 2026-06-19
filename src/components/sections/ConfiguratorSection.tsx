@@ -1,16 +1,17 @@
 "use client";
 
 import { useConfigurator } from "@/hooks/useConfigurator";
-import { modelos, bases, DIMENSAO_UNICA } from "@/data/products";
+import { DIMENSAO_UNICA } from "@/data/products";
 import { StepSelector } from "@/components/configurator/StepSelector";
 import { OptionCard } from "@/components/configurator/OptionCard";
 import { QuantitySelector } from "@/components/configurator/QuantitySelector";
 import { ArteStep } from "@/components/configurator/ArteStep";
 import { OrderSummary } from "@/components/configurator/OrderSummary";
-import type { ModeloId, BaseId } from "@/types";
+import type { ModeloId, BaseId, Catalog } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
-export function ConfiguratorSection() {
+export function ConfiguratorSection({ catalog }: { catalog: Catalog }) {
+  const { modelos, bases } = catalog;
   const {
     config,
     preco,
@@ -20,7 +21,7 @@ export function ConfiguratorSection() {
     setArte,
     setQuantidadeArtes,
     setQuantidade,
-  } = useConfigurator();
+  } = useConfigurator(catalog);
 
   return (
     <section id="configurador" className="bg-gray-50 scroll-mt-20">
@@ -97,6 +98,7 @@ export function ConfiguratorSection() {
               mensagemBloqueio="Escolha a base e estrutura primeiro"
             >
               <ArteStep
+                catalog={catalog}
                 arte={config.arte}
                 quantidadeArtes={config.quantidadeArtes}
                 modeloSelecionado={config.modelo}
@@ -115,6 +117,7 @@ export function ConfiguratorSection() {
               mensagemBloqueio="Escolha a opção de arte primeiro"
             >
               <QuantitySelector
+                descontos={catalog.descontos}
                 quantidade={config.quantidade}
                 precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}
                 onChange={setQuantidade}
@@ -125,7 +128,7 @@ export function ConfiguratorSection() {
           {/* Sidebar sticky */}
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24">
-              <OrderSummary config={config} preco={preco} isComplete={isComplete} />
+              <OrderSummary catalog={catalog} config={config} preco={preco} isComplete={isComplete} />
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@
 
 import { useFreight } from "@/hooks/useFreight";
 import { formatCurrency, maskCep } from "@/lib/utils";
-import { DIAS_ADICIONAIS_ARTE_WEAR } from "@/data/prices";
 import type { ArteId, BaseId, TamanhoId, ShippingOption } from "@/types";
 import { Truck, Loader2, Package } from "lucide-react";
 
@@ -11,9 +10,11 @@ interface FreightCalculatorProps {
   tamanho: TamanhoId | null;
   quantidade: number;
   arte?: ArteId | null;
+  diasAdicionaisArteWear: number;
 }
 
-export function FreightCalculator({ base, tamanho, quantidade, arte }: FreightCalculatorProps) {
+export function FreightCalculator({ base, tamanho, quantidade, arte, diasAdicionaisArteWear }: FreightCalculatorProps) {
+  const DIAS_ADICIONAIS_ARTE_WEAR = diasAdicionaisArteWear;
   const {
     cep,
     setCep,

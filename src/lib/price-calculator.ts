@@ -1,11 +1,13 @@
-import type { ConfiguracaoSelecionada } from "@/types";
-import { precos, PRECO_ARTE_WEAR } from "@/data/prices";
-import { bases, extras, descontos } from "@/data/products";
+import type { ConfiguracaoSelecionada, Catalog } from "@/types";
 
 /**
- * Calcula o preço total da configuração selecionada em centavos
+ * Calcula o preço total da configuração selecionada em centavos.
+ * Recebe o catálogo (vindo do banco, com fallback de código) como fonte de preços.
  */
-export function calcularPreco(config: ConfiguracaoSelecionada): {
+export function calcularPreco(
+  config: ConfiguracaoSelecionada,
+  catalog: Catalog
+): {
   precoBase: number;
   precoAdicionalBase: number;
   precoExtras: number;
@@ -15,6 +17,7 @@ export function calcularPreco(config: ConfiguracaoSelecionada): {
   descontoValor: number;
   total: number;
 } {
+  const { precosBase: precos, bases, extras, descontos, precoArteWear } = catalog;
   const {
     modelo,
     tamanho,
@@ -61,7 +64,7 @@ export function calcularPreco(config: ConfiguracaoSelecionada): {
   const descontoValor = Math.round(subtotal * (descontoPercentual / 100));
 
   const precoArtes =
-    arte === "wear-cria-arte" ? Math.max(1, quantidadeArtes) * PRECO_ARTE_WEAR : 0;
+    arte === "wear-cria-arte" ? Math.max(1, quantidadeArtes) * precoArteWear : 0;
 
   const total = subtotal - descontoValor + precoArtes;
 

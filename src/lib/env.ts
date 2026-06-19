@@ -6,8 +6,10 @@ const envSchema = z.object({
 
   // Auth
   AUTH_SECRET: z.string().min(1),
-  AUTH_GOOGLE_ID: z.string().min(1),
-  AUTH_GOOGLE_SECRET: z.string().min(1),
+  // Google OAuth opcional — lancamento inicial usa apenas email/senha.
+  // Preencher ambos para reativar o provider Google em auth.ts.
+  AUTH_GOOGLE_ID: z.string().min(1).optional(),
+  AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
 
   // Pagar.me v4
   PAGARME_API_KEY: z.string().startsWith("ak_"),
@@ -21,6 +23,9 @@ const envSchema = z.object({
 
   // Resend
   RESEND_API_KEY: z.string().min(1),
+
+  // Vercel Cron (protege /api/cron/*)
+  CRON_SECRET: z.string().optional(),
 
   // App
   NEXT_PUBLIC_APP_URL: z.string().url(),

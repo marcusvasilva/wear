@@ -2,6 +2,10 @@ import type { Modelo, ModeloId, Tamanho, TamanhoId, Tecido, Base, Extra, Descont
 
 const TAMANHO_IDS: TamanhoId[] = ["p", "m", "g", "gg"];
 
+// Wind Banner agora tem medida unica (0,75m x 2,00m), internamente mapeada para o tamanho "m"
+export const TAMANHO_UNICO: TamanhoId = "m";
+export const DIMENSAO_UNICA = "0,75m x 2,00m";
+
 function buildGabaritos(modeloId: ModeloId): Record<TamanhoId, string> {
   return TAMANHO_IDS.reduce(
     (acc, tamanhoId) => {
@@ -53,7 +57,7 @@ export const tamanhos: Tamanho[] = [
   {
     id: "m",
     nome: "Medio",
-    dimensoes: "0,65m x 2,00m",
+    dimensoes: "0,75m x 2,00m",
     imagem: "/images/tamanhos/m-200.jpg",
   },
   {

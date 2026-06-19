@@ -5,6 +5,7 @@ import { z } from "zod/v4";
 
 import { db } from "@/lib/db";
 import { users } from "@/lib/schema";
+import { sendWelcome } from "@/lib/email";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
@@ -49,6 +50,11 @@ export async function POST(request: Request) {
       passwordHash,
       cpf,
       phone,
+    });
+
+    // Email de boas-vindas (best-effort, nao bloqueia o cadastro)
+    sendWelcome({ customerName: name, customerEmail: email }).catch((err) => {
+      console.error("Falha ao enviar email de boas-vindas:", err);
     });
 
     return NextResponse.json({ success: true }, { status: 201 });

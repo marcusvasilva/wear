@@ -73,6 +73,56 @@ function getApiKey(): string {
   return key;
 }
 
+export interface RawCard {
+  number: string; // pode conter espacos/mascaras
+  holderName: string;
+  expiry: string; // "MM/AA" ou "MMAA"
+  cvv: string;
+}
+
+/**
+ * Gera o card_hash do Pagar.me v4 a partir dos dados crus do cartao.
+ *
+ * Fluxo: busca a chave publica RSA (card_hash_key) usando o encryption_key,
+ * criptografa a querystring dos dados do cartao com RSA PKCS1 v1.5 e monta
+ * o hash no formato `${id}_${base64}`. NUNCA logar os dados do cartao aqui.
+ *
+ * Obs.: este hashing roda no servidor. Para PCI SAQ-A pleno (dados do cartao
+ * nunca tocam o backend), migrar para pagarme.js no client futuramente.
+ */
+export async function generateCardHash(card: RawCard): Promise<string> {
+  const encryptionKey = process.env.PAGARME_ENCRYPTION_KEY;
+  if (!encryptionKey) throw new Error("PAGARME_ENCRYPTION_KEY nao configurada");
+
+  const keyResponse = await fetch(
+    `${PAGARME_BASE_URL}/transactions/card_hash_key?encryption_key=${encryptionKey}`
+  );
+
+  if (!keyResponse.ok) {
+    throw new Error("Falha ao obter chave de criptografia do cartao (card_hash_key)");
+  }
+
+  const { id, public_key } = (await keyResponse.json()) as {
+    id: number;
+    public_key: string;
+  };
+
+  const params = new URLSearchParams({
+    card_number: card.number.replace(/\D/g, ""),
+    card_holder_name: card.holderName.trim(),
+    card_expiration_date: card.expiry.replace(/\D/g, ""),
+    card_cvv: card.cvv.replace(/\D/g, ""),
+  }).toString();
+
+  const crypto = require("crypto");
+  const encrypted = crypto.publicEncrypt(
+    { key: public_key, padding: crypto.constants.RSA_PKCS1_PADDING },
+    Buffer.from(params)
+  );
+
+  return `${id}_${encrypted.toString("base64")}`;
+}
+
 export async function createTransaction(
   params: CreateTransactionParams
 ): Promise<PagarmeTransaction> {

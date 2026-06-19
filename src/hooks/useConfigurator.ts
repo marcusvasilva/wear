@@ -4,16 +4,16 @@ import { useState, useCallback, useMemo } from "react";
 import type {
   ConfiguracaoSelecionada,
   ModeloId,
-  TamanhoId,
   BaseId,
   ExtraId,
   ArteId,
 } from "@/types";
 import { calcularPreco } from "@/lib/price-calculator";
+import { TAMANHO_UNICO } from "@/data/products";
 
 const INITIAL_STATE: ConfiguracaoSelecionada = {
   modelo: null,
-  tamanho: null,
+  tamanho: TAMANHO_UNICO,
   tecido: "bora",
   base: null,
   extras: [],
@@ -27,10 +27,6 @@ export function useConfigurator() {
 
   const setModelo = useCallback((modelo: ModeloId) => {
     setConfig((prev) => ({ ...prev, modelo }));
-  }, []);
-
-  const setTamanho = useCallback((tamanho: TamanhoId) => {
-    setConfig((prev) => ({ ...prev, tamanho }));
   }, []);
 
   const setBase = useCallback((base: BaseId) => {
@@ -66,7 +62,6 @@ export function useConfigurator() {
 
   const isComplete =
     config.modelo !== null &&
-    config.tamanho !== null &&
     config.base !== null &&
     config.arte !== null;
 
@@ -75,7 +70,6 @@ export function useConfigurator() {
     preco,
     isComplete,
     setModelo,
-    setTamanho,
     setBase,
     toggleExtra,
     setArte,

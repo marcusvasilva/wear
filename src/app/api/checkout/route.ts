@@ -5,7 +5,7 @@ import { orders, orderItems, addresses, users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { checkoutSchema } from "@/lib/validations";
 import { calcularPreco } from "@/lib/price-calculator";
-import { createTransaction } from "@/lib/pagarme";
+import { createTransaction, generateCardHash } from "@/lib/pagarme";
 import { getSku } from "@/data/sku-mapping";
 import type { ConfiguracaoSelecionada } from "@/types";
 
@@ -52,6 +52,29 @@ export async function POST(request: Request) {
 
   const preco = calcularPreco(config);
   const totalComFrete = preco.total + input.shippingPrice;
+
+  // Gerar o card_hash ANTES de criar o pedido, para falhar rapido sem deixar
+  // pedido orfao no banco caso os dados do cartao sejam invalidos.
+  let cardHash: string | undefined;
+  if (input.paymentMethod === "credit_card") {
+    if (!input.card) {
+      return NextResponse.json({ error: "Dados do cartao ausentes" }, { status: 400 });
+    }
+    try {
+      cardHash = await generateCardHash({
+        number: input.card.number,
+        holderName: input.card.name,
+        expiry: input.card.expiry,
+        cvv: input.card.cvv,
+      });
+    } catch (err) {
+      console.error("[checkout] falha ao gerar card_hash:", err instanceof Error ? err.message : err);
+      return NextResponse.json(
+        { error: "Nao foi possivel validar os dados do cartao. Verifique e tente novamente." },
+        { status: 400 }
+      );
+    }
+  }
 
   // Criar pedido no banco
   const [order] = await db
@@ -138,7 +161,7 @@ export async function POST(request: Request) {
           tangible: true,
         },
       ],
-      cardHash: input.cardHash,
+      cardHash,
       installments: input.installments,
       orderId: order.id,
     });

@@ -120,6 +120,8 @@ export const orders = pgTable("orders", {
   processingErrors: text("processing_errors"),
   // Internal notes (admin only)
   adminNotes: text("admin_notes"),
+  // Lembrete de pagamento (PIX/boleto) enviado
+  paymentReminderSentAt: timestamp("payment_reminder_sent_at", { mode: "date" }),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 });

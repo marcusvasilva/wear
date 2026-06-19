@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { eq } from "drizzle-orm";
@@ -23,10 +22,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
+    // Google OAuth desativado no lancamento inicial (apenas email/senha).
+    // Para reativar: reinstalar o provider e preencher AUTH_GOOGLE_ID/SECRET.
     Credentials({
       name: "credentials",
       credentials: {

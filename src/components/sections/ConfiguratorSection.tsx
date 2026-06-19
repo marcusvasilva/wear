@@ -1,13 +1,13 @@
 "use client";
 
 import { useConfigurator } from "@/hooks/useConfigurator";
-import { modelos, tamanhos, bases } from "@/data/products";
+import { modelos, bases, DIMENSAO_UNICA } from "@/data/products";
 import { StepSelector } from "@/components/configurator/StepSelector";
 import { OptionCard } from "@/components/configurator/OptionCard";
 import { QuantitySelector } from "@/components/configurator/QuantitySelector";
 import { ArteStep } from "@/components/configurator/ArteStep";
 import { OrderSummary } from "@/components/configurator/OrderSummary";
-import type { ModeloId, TamanhoId, BaseId } from "@/types";
+import type { ModeloId, BaseId } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
 export function ConfiguratorSection() {
@@ -16,7 +16,6 @@ export function ConfiguratorSection() {
     preco,
     isComplete,
     setModelo,
-    setTamanho,
     setBase,
     setArte,
     setQuantidadeArtes,
@@ -38,7 +37,7 @@ export function ConfiguratorSection() {
             <StepSelector
               numero={1}
               titulo="Modelo"
-              descricao="Escolha o formato do seu Wind Banner"
+              descricao={`Escolha o formato do seu Wind Banner (medida única ${DIMENSAO_UNICA})`}
               completo={config.modelo !== null}
             >
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -46,7 +45,7 @@ export function ConfiguratorSection() {
                   <OptionCard
                     key={modelo.id}
                     nome={modelo.nome}
-                    descricao={modelo.descricao}
+                    descricao={`${modelo.descricao} · ${DIMENSAO_UNICA}`}
                     imagem={modelo.imagem}
                     selected={config.modelo === modelo.id}
                     onClick={() => setModelo(modelo.id as ModeloId)}
@@ -55,37 +54,14 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 2: Tamanho */}
+            {/* Step 2: Base e Estrutura */}
             <StepSelector
               numero={2}
-              titulo="Tamanho"
-              descricao="Selecione o tamanho ideal"
-              disabled={config.modelo === null}
-              completo={config.tamanho !== null}
-              mensagemBloqueio="Escolha o modelo primeiro"
-            >
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {tamanhos.map((tamanho) => (
-                  <OptionCard
-                    key={tamanho.id}
-                    nome={tamanho.nome}
-                    descricao={tamanho.dimensoes}
-                    imagem={tamanho.imagem}
-                    selected={config.tamanho === tamanho.id}
-                    onClick={() => setTamanho(tamanho.id as TamanhoId)}
-                  />
-                ))}
-              </div>
-            </StepSelector>
-
-            {/* Step 3: Base e Estrutura */}
-            <StepSelector
-              numero={3}
               titulo="Base e Estrutura"
               descricao="Escolha como montar seu Wind Banner"
-              disabled={config.tamanho === null}
+              disabled={config.modelo === null}
               completo={config.base !== null}
-              mensagemBloqueio="Escolha o tamanho primeiro"
+              mensagemBloqueio="Escolha o modelo primeiro"
             >
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {bases.map((base) => {
@@ -111,9 +87,9 @@ export function ConfiguratorSection() {
               </div>
             </StepSelector>
 
-            {/* Step 4: Arte e Personalizacao */}
+            {/* Step 3: Arte e Personalizacao */}
             <StepSelector
-              numero={4}
+              numero={3}
               titulo="Arte e Personalização"
               descricao="Você envia a arte ou a gente cria pra você"
               disabled={config.base === null}
@@ -130,9 +106,9 @@ export function ConfiguratorSection() {
               />
             </StepSelector>
 
-            {/* Step 5: Quantidade */}
+            {/* Step 4: Quantidade */}
             <StepSelector
-              numero={5}
+              numero={4}
               titulo="Quantidade"
               descricao="Quantidade maior = desconto maior"
               disabled={config.arte === null}

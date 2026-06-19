@@ -54,7 +54,16 @@ export const checkoutSchema = z.object({
 
   // Payment
   paymentMethod: z.enum(["credit_card", "pix", "boleto"]),
-  cardHash: z.string().optional(),
+  // Dados crus do cartao (apenas quando paymentMethod === "credit_card").
+  // O card_hash e gerado no servidor antes de chamar o Pagar.me.
+  card: z
+    .object({
+      number: z.string().min(13).max(25),
+      name: z.string().min(1),
+      expiry: z.string().min(4).max(7),
+      cvv: z.string().min(3).max(4),
+    })
+    .optional(),
   installments: z.number().int().min(1).max(6).default(1),
 
   // Customer (for Pagar.me)
@@ -62,7 +71,10 @@ export const checkoutSchema = z.object({
   customerEmail: z.string().email(),
   customerCpf: cpfSchema,
   customerPhone: phoneSchema,
-});
+}).refine(
+  (data) => data.paymentMethod !== "credit_card" || data.card != null,
+  { message: "Dados do cartao obrigatorios para pagamento com cartao", path: ["card"] }
+);
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 export type AddressInput = z.infer<typeof addressSchema>;

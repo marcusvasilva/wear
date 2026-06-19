@@ -40,10 +40,7 @@ export function OrderSummary({ config, preco, isComplete }: OrderSummaryProps) {
       {/* Selecoes */}
       <div className="space-y-2 text-sm">
         <SummaryLine label="Modelo" value={modeloNome} />
-        <SummaryLine
-          label="Tamanho"
-          value={tamanhoInfo ? `${tamanhoInfo.nome} (${tamanhoInfo.dimensoes})` : undefined}
-        />
+        <SummaryLine label="Medida" value={tamanhoInfo?.dimensoes} />
         <SummaryLine label="Base" value={baseNome} />
         {config.extras.length > 0 && (
           <SummaryLine label="Extras" value={`${config.extras.length} selecionado(s)`} />

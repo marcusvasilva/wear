@@ -131,11 +131,17 @@ export function CheckoutStepper() {
         finalAddressId = newAddr.id;
       }
 
-      let cardHash: string | undefined;
-      if (paymentMethod === "credit_card") {
-        // TODO: integrate pagarme.js for PCI compliance
-        cardHash = btoa(JSON.stringify(cardData));
-      }
+      // O card_hash e gerado no servidor (src/lib/pagarme.ts) a partir destes
+      // dados. Enviados apenas quando o metodo for cartao de credito.
+      const card =
+        paymentMethod === "credit_card"
+          ? {
+              number: cardData.number,
+              name: cardData.name,
+              expiry: cardData.expiry,
+              cvv: cardData.cvv,
+            }
+          : undefined;
 
       const r = await fetch("/api/checkout", {
         method: "POST",
@@ -154,7 +160,7 @@ export function CheckoutStepper() {
           shippingService: selectedShipping.name,
           shippingDeadline: selectedShipping.deliveryEstimate,
           paymentMethod,
-          cardHash,
+          card,
           installments,
           customerName: userName,
           customerEmail: userEmail,

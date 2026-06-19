@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { isAdminSession } from "@/lib/admin";
 import { db } from "@/lib/db";
 import { addresses, orderItems, orders, users } from "@/lib/schema";
+import { sendShippingNotification, sendDeliveryConfirmation } from "@/lib/email";
 import type { OrderStatus } from "@/types";
 
 const VALID_STATUSES: OrderStatus[] = [
@@ -88,6 +89,12 @@ export async function PATCH(
   const { id } = await params;
   const body = (await request.json()) as PatchBody;
 
+  const [previous] = await db
+    .select({ status: orders.status })
+    .from(orders)
+    .where(eq(orders.id, id))
+    .limit(1);
+
   const updates: Partial<typeof orders.$inferInsert> = {
     updatedAt: new Date(),
   };
@@ -120,6 +127,39 @@ export async function PATCH(
 
   if (!updated) {
     return NextResponse.json({ error: "Pedido nao encontrado" }, { status: 404 });
+  }
+
+  // Notificacoes por email apenas na transicao de status
+  const statusChanged =
+    body.status !== undefined && previous?.status !== updated.status;
+
+  if (statusChanged && (updated.status === "shipped" || updated.status === "delivered")) {
+    const [customer] = await db
+      .select({ name: users.name, email: users.email })
+      .from(users)
+      .where(eq(users.id, updated.userId))
+      .limit(1);
+
+    if (customer) {
+      const payload = {
+        customerName: customer.name ?? "Cliente",
+        customerEmail: customer.email,
+        orderId: updated.id,
+      };
+
+      const send =
+        updated.status === "shipped"
+          ? sendShippingNotification({
+              ...payload,
+              trackingCode: updated.trackingCode ?? "A definir",
+              shippingService: updated.shippingService ?? "A definir",
+            })
+          : sendDeliveryConfirmation(payload);
+
+      send.catch((err) => {
+        console.error(`Falha ao enviar email de status (${updated.id}):`, err);
+      });
+    }
   }
 
   return NextResponse.json({ order: updated });

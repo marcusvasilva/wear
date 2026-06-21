@@ -70,14 +70,19 @@ export function ConfiguratorSection({ catalog }: { catalog: Catalog }) {
                     config.modelo && base.imagensPorModelo
                       ? base.imagensPorModelo[config.modelo]
                       : base.imagem;
+                  const precoEntrada = config.modelo
+                    ? catalog.precoTiers[`${config.modelo}-${base.id}`]?.[0]?.precoCentavos
+                    : undefined;
                   return (
                     <OptionCard
                       key={base.id}
                       nome={base.nome}
                       descricao={
-                        base.precoAdicional > 0
-                          ? `${base.descricao} (+${formatCurrency(base.precoAdicional)})`
-                          : base.descricao
+                        precoEntrada
+                          ? `${base.descricao} (a partir de ${formatCurrency(precoEntrada)})`
+                          : base.precoAdicional > 0
+                            ? `${base.descricao} (+${formatCurrency(base.precoAdicional)})`
+                            : base.descricao
                       }
                       imagem={imagemBase}
                       selected={config.base === base.id}
@@ -117,9 +122,12 @@ export function ConfiguratorSection({ catalog }: { catalog: Catalog }) {
               mensagemBloqueio="Escolha a opção de arte primeiro"
             >
               <QuantitySelector
-                descontos={catalog.descontos}
+                tiers={
+                  config.modelo && config.base
+                    ? catalog.precoTiers[`${config.modelo}-${config.base}`] ?? []
+                    : []
+                }
                 quantidade={config.quantidade}
-                precoUnitario={preco.precoBase + preco.precoAdicionalBase + preco.precoExtras}
                 onChange={setQuantidade}
               />
             </StepSelector>

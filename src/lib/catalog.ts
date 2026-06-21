@@ -9,10 +9,11 @@ import {
   catalogExtras,
   catalogDiscounts,
   catalogModelSize,
+  catalogPriceTiers,
   catalogSkus,
   catalogSettings,
 } from "./schema";
-import type { Catalog } from "@/types";
+import type { Catalog, PriceTier } from "@/types";
 
 // Defaults de código (fallback quando o banco está vazio ou indisponível).
 import {
@@ -25,6 +26,7 @@ import {
 } from "@/data/products";
 import {
   precos as precosSeed,
+  precoTiers as precoTiersSeed,
   PRECO_ARTE_WEAR,
   DIAS_ADICIONAIS_ARTE_WEAR,
 } from "@/data/prices";
@@ -51,6 +53,7 @@ function fallbackCatalog(): Catalog {
     extras: extrasSeed,
     descontos: descontosSeed,
     precosBase: { ...precosSeed },
+    precoTiers: { ...precoTiersSeed },
     skus: { ...skuSeed },
     precoArteWear: PRECO_ARTE_WEAR,
     diasAdicionaisArteWear: DIAS_ADICIONAIS_ARTE_WEAR,
@@ -65,6 +68,7 @@ async function buildFromDb(): Promise<Catalog | null> {
     extraRows,
     discountRows,
     msRows,
+    tierRows,
     skuRows,
     settingRows,
   ] = await Promise.all([
@@ -74,6 +78,7 @@ async function buildFromDb(): Promise<Catalog | null> {
     db.select().from(catalogExtras).where(eq(catalogExtras.ativo, true)),
     db.select().from(catalogDiscounts),
     db.select().from(catalogModelSize),
+    db.select().from(catalogPriceTiers),
     db.select().from(catalogSkus),
     db.select().from(catalogSettings),
   ]);
@@ -100,6 +105,18 @@ async function buildFromDb(): Promise<Catalog | null> {
     if (row.tinySku) {
       skus[`${row.modelSlug}-${row.sizeSlug}-${row.baseSlug}`] = row.tinySku;
     }
+  }
+
+  // Faixas de preço por quantidade: { "modelo-base": [{minQty, precoCentavos}] }
+  const precoTiers: Record<string, PriceTier[]> = {};
+  for (const row of tierRows) {
+    (precoTiers[`${row.modelSlug}-${row.baseSlug}`] ??= []).push({
+      minQty: row.minQty,
+      precoCentavos: row.precoCentavos,
+    });
+  }
+  for (const key of Object.keys(precoTiers)) {
+    precoTiers[key].sort((a, b) => a.minQty - b.minQty);
   }
 
   const settingsInt: Record<string, number> = {};
@@ -151,6 +168,7 @@ async function buildFromDb(): Promise<Catalog | null> {
       .sort((a, b) => a.minQty - b.minQty)
       .map((d) => ({ minQty: d.minQty, descontoPercentual: d.percentual })),
     precosBase,
+    precoTiers,
     skus,
     precoArteWear: settingsInt["preco_arte_wear"] ?? PRECO_ARTE_WEAR,
     diasAdicionaisArteWear:

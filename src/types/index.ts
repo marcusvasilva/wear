@@ -50,6 +50,13 @@ export interface DescontoQuantidade {
   descontoPercentual: number;
 }
 
+// Faixa de preço por quantidade: preço unitário (em centavos) já com a base
+// inclusa. A faixa com minQty=1 é o preço cheio (sem desconto por quantidade).
+export interface PriceTier {
+  minQty: number;
+  precoCentavos: number;
+}
+
 export interface ConfiguracaoSelecionada {
   modelo: ModeloId | null;
   tamanho: TamanhoId | null;
@@ -72,6 +79,9 @@ export interface Catalog {
   descontos: DescontoQuantidade[];
   // Chave "modelo-tamanho-tecido" -> preço base em centavos (mesma chave do calculador)
   precosBase: Record<string, number>;
+  // Chave "modelo-base" -> faixas de preço por quantidade (preço unitário, base inclusa).
+  // Quando presente, é a fonte da verdade do preço (substitui precosBase + adicional + desconto%).
+  precoTiers: Record<string, PriceTier[]>;
   // Chave "modelo-tamanho-base" -> SKU do Tiny
   skus: Record<string, string>;
   precoArteWear: number;

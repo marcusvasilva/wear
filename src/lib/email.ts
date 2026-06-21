@@ -6,8 +6,9 @@ function getResend(): Resend {
   return new Resend(apiKey);
 }
 
-const FROM_EMAIL = "Wear Sublimacoes <nao-responda@send.wearsublimacoes.com.br>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.wearsublimacoes.com.br";
+const FROM_EMAIL = "Wear Sublimações <nao-responda@send.wearsublimacoes.com.br>";
+// Links apontam para paginas DESTE app (a LP /pedido/[id], etc.), nao para o ecommerce.
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://wb.wearsublimacoes.com.br";
 
 function orderUrl(orderId: string): string {
   return `${APP_URL}/pedido/${orderId}`;
@@ -23,13 +24,13 @@ function layout(heading: string, bodyHtml: string): string {
   return `
     <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <div style="background: #1B1B1B; padding: 20px; text-align: center;">
-        <h1 style="color: #fff; margin: 0; font-size: 20px;">Wear Sublimacoes</h1>
+        <h1 style="color: #fff; margin: 0; font-size: 20px;">Wear Sublimações</h1>
       </div>
       <div style="padding: 30px 20px;">
         <h2 style="color: #2ECC40;">${heading}</h2>
         ${bodyHtml}
         <p style="color: #999; font-size: 12px; margin-top: 30px;">
-          Duvidas? Entre em contato pelo WhatsApp: (18) 99807-4936
+          Dúvidas? Entre em contato pelo WhatsApp: (18) 99807-4936
         </p>
       </div>
     </div>
@@ -46,7 +47,7 @@ function button(href: string, label: string): string {
 
 function paymentLabel(method: string): string {
   return method === "credit_card"
-    ? "Cartao de Credito"
+    ? "Cartão de Crédito"
     : method === "pix"
     ? "PIX"
     : "Boleto";
@@ -75,8 +76,8 @@ export async function sendOrderConfirmation(data: OrderEmailData): Promise<void>
     html: layout(
       "Pedido confirmado!",
       `
-        <p>Ola ${data.customerName},</p>
-        <p>Recebemos seu pedido e estamos preparando tudo para voce.</p>
+        <p>Olá ${data.customerName},</p>
+        <p>Recebemos seu pedido e estamos preparando tudo para você.</p>
         ${card(`
           <p style="margin: 4px 0;"><strong>Pedido:</strong> #${shortId(data.orderId)}</p>
           <p style="margin: 4px 0;"><strong>Produto:</strong> ${data.items}</p>
@@ -84,7 +85,7 @@ export async function sendOrderConfirmation(data: OrderEmailData): Promise<void>
           <p style="margin: 4px 0;"><strong>Pagamento:</strong> ${paymentLabel(data.paymentMethod)}</p>
           <p style="margin: 4px 0;"><strong>Envio:</strong> ${data.shippingService} (${data.shippingDeadline})</p>
         `)}
-        <p>Voce pode acompanhar o status do seu pedido a qualquer momento.</p>
+        <p>Você pode acompanhar o status do seu pedido a qualquer momento.</p>
         ${button(orderUrl(data.orderId), "Acompanhar pedido")}
       `
     ),
@@ -111,11 +112,11 @@ export async function sendShippingNotification(data: ShippingEmailData): Promise
     html: layout(
       "Pedido enviado!",
       `
-        <p>Ola ${data.customerName},</p>
+        <p>Olá ${data.customerName},</p>
         <p>Seu pedido #${shortId(data.orderId)} foi despachado!</p>
         ${card(`
           <p style="margin: 4px 0;"><strong>Transportadora:</strong> ${data.shippingService}</p>
-          <p style="margin: 4px 0;"><strong>Codigo de rastreamento:</strong> ${data.trackingCode}</p>
+          <p style="margin: 4px 0;"><strong>Código de rastreamento:</strong> ${data.trackingCode}</p>
         `)}
         ${button(orderUrl(data.orderId), "Acompanhar pedido")}
       `
@@ -141,9 +142,9 @@ export async function sendDeliveryConfirmation(data: DeliveryEmailData): Promise
     html: layout(
       "Pedido entregue!",
       `
-        <p>Ola ${data.customerName},</p>
-        <p>Seu pedido #${shortId(data.orderId)} foi entregue. Esperamos que voce ame o resultado!</p>
-        <p>Se algo nao saiu como esperado, fale com a gente pelo WhatsApp que resolvemos rapidinho.</p>
+        <p>Olá ${data.customerName},</p>
+        <p>Seu pedido #${shortId(data.orderId)} foi entregue. Esperamos que você ame o resultado!</p>
+        <p>Se algo não saiu como esperado, fale com a gente pelo WhatsApp que resolvemos rapidinho.</p>
         ${button(orderUrl(data.orderId), "Ver pedido")}
       `
     ),
@@ -163,12 +164,12 @@ export async function sendWelcome(data: WelcomeEmailData): Promise<void> {
   await resend.emails.send({
     from: FROM_EMAIL,
     to: data.customerEmail,
-    subject: "Bem-vindo a Wear Sublimacoes!",
+    subject: "Bem-vindo à Wear Sublimações!",
     html: layout(
       "Conta criada com sucesso!",
       `
-        <p>Ola ${data.customerName},</p>
-        <p>Sua conta na Wear Sublimacoes foi criada. Agora voce pode montar seu Wind Banner personalizado e acompanhar seus pedidos por aqui.</p>
+        <p>Olá ${data.customerName},</p>
+        <p>Sua conta na Wear Sublimações foi criada. Agora você pode montar seu Wind Banner personalizado e acompanhar seus pedidos por aqui.</p>
         ${button(APP_URL, "Criar meu Wind Banner")}
       `
     ),
@@ -189,13 +190,13 @@ export async function sendPaymentFailed(data: PaymentFailedEmailData): Promise<v
   await resend.emails.send({
     from: FROM_EMAIL,
     to: data.customerEmail,
-    subject: `Nao conseguimos confirmar seu pagamento #${shortId(data.orderId)}`,
+    subject: `Não conseguimos confirmar seu pagamento #${shortId(data.orderId)}`,
     html: layout(
-      "Pagamento nao aprovado",
+      "Pagamento não aprovado",
       `
-        <p>Ola ${data.customerName},</p>
-        <p>Infelizmente o pagamento do seu pedido #${shortId(data.orderId)} nao foi aprovado.</p>
-        <p>Voce pode tentar novamente com outro cartao ou escolher PIX/boleto. Seus dados do pedido continuam salvos.</p>
+        <p>Olá ${data.customerName},</p>
+        <p>Infelizmente o pagamento do seu pedido #${shortId(data.orderId)} não foi aprovado.</p>
+        <p>Você pode tentar novamente com outro cartão ou escolher PIX/boleto. Seus dados do pedido continuam salvos.</p>
         ${button(orderUrl(data.orderId), "Tentar novamente")}
       `
     ),
@@ -220,13 +221,13 @@ export async function sendPaymentReminder(data: PaymentReminderEmailData): Promi
   await resend.emails.send({
     from: FROM_EMAIL,
     to: data.customerEmail,
-    subject: `Seu ${method} esta prestes a vencer #${shortId(data.orderId)}`,
+    subject: `Seu ${method} está prestes a vencer #${shortId(data.orderId)}`,
     html: layout(
-      "Nao perca o prazo!",
+      "Não perca o prazo!",
       `
-        <p>Ola ${data.customerName},</p>
-        <p>O pagamento via ${method} do seu pedido #${shortId(data.orderId)} ainda nao foi confirmado e vence em <strong>${data.expiresAtLabel}</strong>.</p>
-        <p>Pague antes do prazo para garantir seu Wind Banner. Apos o vencimento sera necessario refazer o pedido.</p>
+        <p>Olá ${data.customerName},</p>
+        <p>O pagamento via ${method} do seu pedido #${shortId(data.orderId)} ainda não foi confirmado e vence em <strong>${data.expiresAtLabel}</strong>.</p>
+        <p>Pague antes do prazo para garantir seu Wind Banner. Após o vencimento será necessário refazer o pedido.</p>
         ${button(orderUrl(data.orderId), "Pagar agora")}
       `
     ),

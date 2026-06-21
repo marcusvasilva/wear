@@ -195,6 +195,19 @@ export const catalogModelSize = pgTable(
   (t) => [primaryKey({ columns: [t.modelSlug, t.sizeSlug] })]
 );
 
+// Faixa de preço por quantidade, por combinação modelo × base.
+// Preço unitário em centavos (base inclusa). minQty=1 é o preço cheio.
+export const catalogPriceTiers = pgTable(
+  "catalog_price_tiers",
+  {
+    modelSlug: text("model_slug").notNull(),
+    baseSlug: text("base_slug").notNull(),
+    minQty: integer("min_qty").notNull(),
+    precoCentavos: integer("preco_centavos").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.modelSlug, t.baseSlug, t.minQty] })]
+);
+
 // SKU do Tiny por combinação modelo × tamanho × base
 export const catalogSkus = pgTable(
   "catalog_skus",

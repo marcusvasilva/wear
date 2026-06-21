@@ -57,16 +57,19 @@ export async function POST(request: Request) {
 
   // Processar conforme status
   if (currentStatus === "paid") {
-    // Idempotencia: o Pagar.me reenvia webhooks. So processa se o pedido
-    // ainda nao estava pago, evitando duplicar pedido no Tiny/etiqueta/email.
-    const alreadyPaid = order.status === "paid";
+    // Idempotencia: o Pagar.me reenvia webhooks. O processPayment move o
+    // pedido para "processing", entao checar apenas "paid" deixaria um reenvio
+    // reprocessar e duplicar etiqueta. Consideramos "ja processado" qualquer
+    // status que so e atingido apos o pos-pagamento ter rodado.
+    const PROCESSED_STATUSES = ["paid", "processing", "shipped", "delivered"];
+    const alreadyProcessed = PROCESSED_STATUSES.includes(order.status);
 
     await db
       .update(orders)
       .set({ status: "paid", updatedAt: new Date() })
       .where(eq(orders.id, order.id));
 
-    if (!alreadyPaid) {
+    if (!alreadyProcessed) {
       // Processar pos-pagamento (Tiny + Melhor Envio + Email)
       // Executa de forma assincrona para nao atrasar o response
       processPayment(order.id).catch((err) => {

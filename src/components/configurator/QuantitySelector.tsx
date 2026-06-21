@@ -2,20 +2,19 @@
 
 import { Minus, Plus } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import type { DescontoQuantidade } from "@/types";
+import type { PriceTier } from "@/types";
 
 interface QuantitySelectorProps {
-  descontos: DescontoQuantidade[];
+  tiers: PriceTier[];
   quantidade: number;
-  precoUnitario: number;
   onChange: (qty: number) => void;
 }
 
-export function QuantitySelector({ descontos, quantidade, precoUnitario, onChange }: QuantitySelectorProps) {
-  const tierAtivo = descontos.reduce<number | null>(
-    (acc, d) => (quantidade >= d.minQty ? d.minQty : acc),
-    null,
-  );
+export function QuantitySelector({ tiers, quantidade, onChange }: QuantitySelectorProps) {
+  const ordenadas = [...tiers].sort((a, b) => a.minQty - b.minQty);
+  const precoCheio = ordenadas[0]?.precoCentavos ?? 0;
+  const tierAtivo =
+    ordenadas.filter((t) => quantidade >= t.minQty).pop()?.minQty ?? null;
 
   return (
     <div className="space-y-4">
@@ -45,34 +44,39 @@ export function QuantitySelector({ descontos, quantidade, precoUnitario, onChang
         </button>
       </div>
 
-      {/* Tabela de descontos */}
-      {precoUnitario > 0 && (
+      {/* Tabela de faixas de preço */}
+      {ordenadas.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {descontos.map((d) => {
-            const precoComDesconto = Math.round(precoUnitario * (1 - d.descontoPercentual / 100));
-            const isAtivo = tierAtivo === d.minQty;
-            return (
-              <button
-                key={d.minQty}
-                onClick={() => onChange(d.minQty)}
-                className={`p-2.5 rounded-xl border-2 text-center transition-all ${
-                  isAtivo
-                    ? "border-primary bg-primary-light"
-                    : "border-border hover:border-gray-300"
-                }`}
-              >
-                <p className="text-xs font-semibold text-text">
-                  {d.minQty} unidades
-                </p>
-                <p className="text-xs text-primary font-bold">
-                  -{d.descontoPercentual}%
-                </p>
-                <p className="text-xs text-text-muted">
-                  {formatCurrency(precoComDesconto)}/un
-                </p>
-              </button>
-            );
-          })}
+          {ordenadas
+            .filter((t) => t.minQty > 1)
+            .map((t) => {
+              const descontoPct =
+                precoCheio > 0
+                  ? Math.round(((precoCheio - t.precoCentavos) / precoCheio) * 100)
+                  : 0;
+              const isAtivo = tierAtivo === t.minQty;
+              return (
+                <button
+                  key={t.minQty}
+                  onClick={() => onChange(t.minQty)}
+                  className={`p-2.5 rounded-xl border-2 text-center transition-all ${
+                    isAtivo
+                      ? "border-primary bg-primary-light"
+                      : "border-border hover:border-gray-300"
+                  }`}
+                >
+                  <p className="text-xs font-semibold text-text">
+                    {t.minQty}+ unidades
+                  </p>
+                  {descontoPct > 0 && (
+                    <p className="text-xs text-primary font-bold">-{descontoPct}%</p>
+                  )}
+                  <p className="text-xs text-text-muted">
+                    {formatCurrency(t.precoCentavos)}/un
+                  </p>
+                </button>
+              );
+            })}
         </div>
       )}
     </div>

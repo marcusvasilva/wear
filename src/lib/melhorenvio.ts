@@ -3,6 +3,11 @@ import type { BaseId, TamanhoId, ShippingOption } from "@/types";
 const MELHOR_ENVIO_BASE_URL = "https://melhorenvio.com.br/api/v2";
 const ORIGIN_CEP = "16204281"; // Birigui-SP
 
+// IDs de servico dos Correios no Melhor Envio: 1 = PAC, 2 = SEDEX.
+// Usados para restringir a cotacao apenas aos Correios.
+const CORREIOS_SERVICE_IDS = [1, 2];
+const CORREIOS_COMPANY_ID = 1;
+
 interface PackageDimensions {
   weight: number; // kg
   width: number; // cm
@@ -101,6 +106,8 @@ export async function calcularFrete(
         quantity: 1,
       },
     ],
+    // Restringe a cotacao aos Correios (PAC e SEDEX).
+    services: CORREIOS_SERVICE_IDS.join(","),
   };
 
   const response = await fetch(`${MELHOR_ENVIO_BASE_URL}/me/shipment/calculate`, {
@@ -117,7 +124,14 @@ export async function calcularFrete(
   const data: MelhorEnvioShipmentOption[] = await response.json();
 
   return data
-    .filter((option) => !option.error && option.price)
+    .filter(
+      (option) =>
+        !option.error &&
+        option.price &&
+        // Garante apenas Correios mesmo se a API ignorar o filtro `services`.
+        (option.company?.id === CORREIOS_COMPANY_ID ||
+          CORREIOS_SERVICE_IDS.includes(option.id)),
+    )
     .map((option) => {
       const priceFloat = parseFloat(option.custom_price || option.price || "0");
       const deliveryMin = option.delivery_range?.min ?? option.delivery_time ?? 0;
@@ -179,6 +193,8 @@ export async function pagarEtiqueta(orderIds: string[]): Promise<unknown> {
 
 /**
  * Gera etiquetas para impressao no Melhor Envio.
+ * A resposta vem indexada pelo id do pedido, ex.:
+ * { "<orderId>": { id, status, tracking, ... } }
  */
 export async function gerarEtiqueta(orderIds: string[]): Promise<unknown> {
   const response = await fetch(`${MELHOR_ENVIO_BASE_URL}/me/shipment/generate`, {
@@ -193,4 +209,50 @@ export async function gerarEtiqueta(orderIds: string[]): Promise<unknown> {
   }
 
   return response.json();
+}
+
+/**
+ * Consulta um pedido no Melhor Envio pelo id.
+ * Usado como fallback para obter o codigo de rastreio quando ele ainda
+ * nao esta disponivel logo apos o generate.
+ */
+export async function consultarPedido(orderId: string): Promise<unknown> {
+  const response = await fetch(`${MELHOR_ENVIO_BASE_URL}/me/orders/${orderId}`, {
+    method: "GET",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Erro ao consultar pedido (${response.status}): ${errorText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Extrai o codigo de rastreio de uma resposta do Melhor Envio.
+ * Aceita tanto o formato do generate (indexado por id) quanto o do
+ * pedido/checkout (objeto com campo `tracking`).
+ */
+export function extrairTracking(payload: unknown, orderId?: string): string | null {
+  if (typeof payload !== "object" || payload === null) return null;
+
+  const obj = payload as Record<string, unknown>;
+
+  // Formato do generate: { "<orderId>": { tracking } }
+  if (orderId && typeof obj[orderId] === "object" && obj[orderId] !== null) {
+    const inner = obj[orderId] as Record<string, unknown>;
+    if (typeof inner.tracking === "string" && inner.tracking) return inner.tracking;
+  }
+
+  // Formato direto: { tracking } (ex.: GET /me/orders/{id})
+  if (typeof obj.tracking === "string" && obj.tracking) return obj.tracking;
+
+  // Formato do checkout: { purchase: { orders: [{ tracking }] } }
+  const purchase = obj.purchase as { orders?: Array<{ tracking?: string }> } | undefined;
+  const fromPurchase = purchase?.orders?.[0]?.tracking;
+  if (typeof fromPurchase === "string" && fromPurchase) return fromPurchase;
+
+  return null;
 }

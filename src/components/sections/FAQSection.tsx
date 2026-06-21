@@ -34,7 +34,7 @@ const faqItems = [
   {
     titulo: "Como funciona o desconto por quantidade?",
     conteudo:
-      "Oferecemos descontos progressivos: 5% a partir de 5 unidades, 10% a partir de 10, 15% a partir de 20 e 20% a partir de 50 unidades. Ideal para empresas e eventos.",
+      "Oferecemos preço por faixa de quantidade: quanto mais unidades, menor o preço por unidade. As faixas (5, 10, 20 e 50 unidades) aparecem direto no configurador ao escolher a quantidade. Ideal para empresas e eventos.",
   },
   {
     titulo: "Em quais formatos posso enviar minha arte?",

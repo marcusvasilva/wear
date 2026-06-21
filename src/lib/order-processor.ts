@@ -2,7 +2,14 @@ import { db } from "./db";
 import { orders, orderItems, addresses, users } from "./schema";
 import { eq } from "drizzle-orm";
 import { incluirPedido, gerarNotaFiscal } from "./tiny";
-import { criarEtiqueta, pagarEtiqueta, gerarEtiqueta, getPackageDimensions } from "./melhorenvio";
+import {
+  criarEtiqueta,
+  pagarEtiqueta,
+  gerarEtiqueta,
+  consultarPedido,
+  extrairTracking,
+  getPackageDimensions,
+} from "./melhorenvio";
 import { sendOrderConfirmation } from "./email";
 import { formatCurrency } from "./utils";
 import type { BaseId, TamanhoId } from "@/types";
@@ -30,9 +37,11 @@ export async function processPayment(orderId: string): Promise<void> {
   const errors: string[] = [];
 
   // 1. Criar pedido no Tiny ERP
-  let tinyPedidoId: string | null = null;
+  // Idempotente: se o pedido ja foi criado (reprocessamento/reenvio de webhook),
+  // reaproveita o id existente e nao duplica no Tiny.
+  let tinyPedidoId: string | null = order.tinyPedidoId ?? null;
   try {
-    if (address) {
+    if (address && !tinyPedidoId) {
       tinyPedidoId = await incluirPedido({
         orderId: order.id,
         customerName: user.name ?? "Cliente",
@@ -68,10 +77,10 @@ export async function processPayment(orderId: string): Promise<void> {
     errors.push(`Tiny pedido: ${err instanceof Error ? err.message : String(err)}`);
   }
 
-  // 2. Gerar NF-e no Tiny
-  let tinyNfeId: string | null = null;
+  // 2. Gerar NF-e no Tiny (idempotente: pula se ja emitida)
+  let tinyNfeId: string | null = order.tinyNfeId ?? null;
   try {
-    if (tinyPedidoId) {
+    if (tinyPedidoId && !tinyNfeId) {
       tinyNfeId = await gerarNotaFiscal(tinyPedidoId);
       await db
         .update(orders)
@@ -83,8 +92,10 @@ export async function processPayment(orderId: string): Promise<void> {
   }
 
   // 3. Criar etiqueta de envio no Melhor Envio
+  // Idempotente: se ja existe shipment, nao cria/paga outra etiqueta (evita
+  // cobranca e etiqueta duplicada em reenvio de webhook ou reprocessamento).
   try {
-    if (address && items.length > 0) {
+    if (address && items.length > 0 && !order.melhorenvioShipmentId) {
       const item = items[0];
       const dims = getPackageDimensions(
         item.base as BaseId,
@@ -152,19 +163,26 @@ export async function processPayment(orderId: string): Promise<void> {
           : null;
 
       if (shipmentId) {
-        // Pagar e gerar a etiqueta
+        // Pagar e gerar a etiqueta. O codigo de rastreio so e emitido pela
+        // transportadora apos o generate, entao a melhor fonte e a resposta
+        // do generate; o checkout normalmente ainda vem com tracking null.
         const checkout = await pagarEtiqueta([shipmentId]);
-        await gerarEtiqueta([shipmentId]);
+        const generated = await gerarEtiqueta([shipmentId]);
 
-        // Extrair tracking code do checkout
-        let trackingCode: string | null = null;
-        if (
-          typeof checkout === "object" &&
-          checkout !== null &&
-          "purchase" in checkout
-        ) {
-          const purchase = (checkout as { purchase: { orders?: Array<{ tracking?: string }> } }).purchase;
-          trackingCode = purchase?.orders?.[0]?.tracking ?? null;
+        let trackingCode =
+          extrairTracking(generated, shipmentId) ?? extrairTracking(checkout);
+
+        // Fallback: o tracking pode levar alguns segundos para ficar
+        // disponivel. Consulta o pedido diretamente se ainda veio vazio.
+        if (!trackingCode) {
+          try {
+            const pedido = await consultarPedido(shipmentId);
+            trackingCode = extrairTracking(pedido, shipmentId);
+          } catch (err) {
+            errors.push(
+              `Melhor Envio tracking: ${err instanceof Error ? err.message : String(err)}`
+            );
+          }
         }
 
         await db

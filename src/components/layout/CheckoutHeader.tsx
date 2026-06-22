@@ -24,14 +24,14 @@ export function CheckoutHeader() {
           </span>
 
           <a
-            href="https://wa.me/5518998074936"
+            href="https://wa.me/5518997810521"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-medium hover:text-primary transition-colors"
             aria-label="Atendimento WhatsApp"
           >
             <Phone size={16} />
-            <span className="hidden sm:inline">(18) 99807-4936</span>
+            <span className="hidden sm:inline">(18) 99781-0521</span>
             <span className="sm:hidden">Ajuda</span>
           </a>
         </div>

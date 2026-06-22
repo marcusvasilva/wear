@@ -30,7 +30,7 @@ function layout(heading: string, bodyHtml: string): string {
         <h2 style="color: #2ECC40;">${heading}</h2>
         ${bodyHtml}
         <p style="color: #999; font-size: 12px; margin-top: 30px;">
-          Dúvidas? Entre em contato pelo WhatsApp: (18) 99807-4936
+          Dúvidas? Entre em contato pelo WhatsApp: (18) 99781-0521
         </p>
       </div>
     </div>

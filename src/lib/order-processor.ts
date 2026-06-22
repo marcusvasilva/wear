@@ -107,7 +107,7 @@ export async function processPayment(orderId: string): Promise<void> {
         service: order.shippingService ? parseInt(order.shippingService) || 1 : 1,
         from: {
           name: "Wear Sublimacoes",
-          phone: "18998074936",
+          phone: "18997810521",
           email: "contato.wear.artefatos@gmail.com",
           document: "34616422000108",
           company_document: "34616422000108",

@@ -469,7 +469,7 @@ export default function PedidoPage() {
             )}
 
             <a
-              href="https://wa.me/5518998074936?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20meu%20pedido"
+              href="https://wa.me/5518997810521?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%20meu%20pedido"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-primary-light hover:bg-primary-light/70 text-primary font-semibold rounded-2xl p-5 transition-colors"

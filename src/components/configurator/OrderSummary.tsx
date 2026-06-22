@@ -129,7 +129,7 @@ export function OrderSummary({ catalog, config, preco, isComplete }: OrderSummar
 
       {/* WhatsApp */}
       <a
-        href="https://wa.me/5518998074936?text=Ol%C3%A1!%20Tenho%20interesse%20em%20Wind%20Banners"
+        href="https://wa.me/5518997810521?text=Ol%C3%A1!%20Tenho%20interesse%20em%20Wind%20Banners"
         target="_blank"
         rel="noopener noreferrer"
         className="block text-center text-sm text-blue hover:underline"

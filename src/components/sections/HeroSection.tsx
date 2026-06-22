@@ -60,7 +60,7 @@ export function HeroSection() {
               <ArrowRight size={18} />
             </a>
             <a
-              href="https://wa.me/5518998074936?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20Wind%20Banner"
+              href="https://wa.me/5518997810521?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20Wind%20Banner"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white/60 backdrop-blur-sm text-white font-medium text-sm px-6 py-3.5 rounded-lg transition-colors"

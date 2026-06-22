@@ -15,13 +15,13 @@ export function TopBar() {
           </span>
         </div>
         <a
-          href="https://wa.me/5518998074936"
+          href="https://wa.me/5518997810521"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 hover:text-primary transition-colors"
         >
           <Phone size={14} />
-          (18) 99807-4936
+          (18) 99781-0521
         </a>
       </div>
     </div>
